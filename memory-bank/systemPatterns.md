@@ -11,19 +11,19 @@ flowchart TD
         Pages[Page Components]
         Hooks[Custom Hooks]
     end
-    
+
     subgraph "Application Layer"
         Routes[Next.js App Router]
         StateManagement[State Management]
         FormHandling[Form Handling]
     end
-    
+
     subgraph "Service Layer"
         APIClient[API Client]
         Auth[Authentication]
         Validation[Data Validation]
     end
-    
+
     UI --> Pages
     Pages --> Routes
     Pages --> Hooks
@@ -39,6 +39,7 @@ flowchart TD
 ### Component Architecture
 
 #### Atomic Design Methodology
+
 The UI is structured following atomic design principles:
 
 ```mermaid
@@ -58,6 +59,7 @@ flowchart LR
 ### Data Flow Patterns
 
 #### Unidirectional Data Flow
+
 ```mermaid
 flowchart LR
     State[Application State] --> Props[Component Props]
@@ -72,6 +74,7 @@ flowchart LR
 - UI re-renders based on new state
 
 #### Server and Client Components
+
 Next.js App Router enables a hybrid approach:
 
 ```mermaid
@@ -81,13 +84,13 @@ flowchart TD
         InitialRendering[Initial Rendering]
         SEO[SEO Optimization]
     end
-    
+
     subgraph "Client Components"
         Interactivity[User Interactions]
         ClientState[Client-side State]
         Effects[Side Effects]
     end
-    
+
     DataFetching --> InitialRendering
     InitialRendering --> Interactivity
     ClientState --> Interactivity
@@ -100,6 +103,7 @@ flowchart TD
 ## Module Organization
 
 ### Feature-Based Structure
+
 ```
 src/
 ├── app/                    # Next.js App Router pages
@@ -124,26 +128,31 @@ src/
 ## Key Technical Decisions
 
 ### Routing Strategy
+
 - **App Router**: Using Next.js App Router for file-system based routing
 - **Route Groups**: Organizing routes by feature using route groups (parentheses notation)
 - **Layouts**: Shared layouts for consistent UI across related pages
 
 ### State Management
+
 - **React Hooks**: Using React's built-in hooks for component state
 - **Context API**: For sharing state across component trees when needed
 - **Server Components**: Leveraging server components to reduce client-side state
 
 ### Form Handling
+
 - **Controlled Components**: For form inputs with immediate validation
 - **Form Libraries**: Consider React Hook Form for complex forms
 - **Validation**: Client-side validation with potential for server validation
 
 ### Styling Approach
+
 - **Utility-First**: Using Tailwind CSS for rapid UI development
 - **Component Consistency**: Using ShadCN UI components for consistent design
 - **Theme Variables**: CSS variables for theming and dark mode support
 
 ### Authentication Pattern
+
 - **JWT Tokens**: For secure authentication (future implementation)
 - **Protected Routes**: Middleware for route protection
 - **Role-Based Access**: Different interfaces for residents vs administrators
@@ -153,28 +162,30 @@ src/
 ### User Interface Patterns
 
 #### Layout Composition
+
 ```mermaid
 flowchart TD
     RootLayout[Root Layout] --> AuthLayout[Auth Layout]
     RootLayout --> DashboardLayout[Dashboard Layout]
     RootLayout --> PublicLayout[Public Layout]
-    
+
     AuthLayout --> LoginPage[Login Page]
     AuthLayout --> RegisterPage[Register Page]
-    
+
     DashboardLayout --> UserDashboard[User Dashboard]
     DashboardLayout --> AdminDashboard[Admin Dashboard]
-    
+
     PublicLayout --> HomePage[Home Page]
     PublicLayout --> AboutPage[About Page]
 ```
 
 #### Component Communication
+
 ```mermaid
 flowchart TD
     Parent[Parent Component] -- Props --> Child[Child Component]
     Child -- Events --> Parent
-    
+
     Context[Context Provider] -- Context Value --> Consumer1[Consumer Component]
     Context -- Context Value --> Consumer2[Consumer Component]
 ```
@@ -182,10 +193,12 @@ flowchart TD
 ## Error Handling Patterns
 
 ### Error Boundaries
+
 - React error boundaries for catching and displaying errors
 - Custom error pages for different error types
 
 ### Form Validation
+
 - Inline validation with immediate feedback
 - Form-level validation before submission
 - Server validation response handling
@@ -193,14 +206,17 @@ flowchart TD
 ## Performance Patterns
 
 ### Code Splitting
+
 - Route-based code splitting with Next.js
 - Dynamic imports for large components
 
 ### Image Optimization
+
 - Next.js Image component for automatic optimization
 - Responsive images with appropriate sizes
 
 ### Rendering Strategies
+
 - Server components for data-heavy pages
 - Client components for interactive elements
 - Static generation for content that rarely changes
@@ -208,11 +224,13 @@ flowchart TD
 ## Accessibility Patterns
 
 ### Semantic HTML
+
 - Proper heading hierarchy
 - ARIA attributes where needed
 - Keyboard navigation support
 
 ### Focus Management
+
 - Visible focus indicators
 - Proper tab order
 - Focus trapping for modals
@@ -220,20 +238,24 @@ flowchart TD
 ## Responsive Design Patterns
 
 ### Mobile-First Approach
+
 - Design for mobile screens first
 - Progressive enhancement for larger screens
 
 ### Breakpoint System
+
 - Consistent breakpoints using Tailwind's default system
 - Component-specific responsive behavior
 
 ## Testing Patterns
 
 ### Component Testing
+
 - Unit tests for utility functions
 - Component tests for UI behavior
 - Integration tests for feature flows
 
 ### Mocking Strategy
+
 - Mock API responses for testing
 - Mock authentication for protected routes

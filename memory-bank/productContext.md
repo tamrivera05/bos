@@ -1,6 +1,7 @@
 # Product Context: Barangay Online Services
 
 ## Purpose & Problem Statement
+
 The Barangay Online Services platform addresses the inefficiencies and accessibility challenges in traditional barangay administrative processes in the Philippines. Currently, residents must physically visit barangay offices during limited operating hours to request documents, submit concerns, or access information. This creates:
 
 1. Time and resource wastage for residents
@@ -10,6 +11,7 @@ The Barangay Online Services platform addresses the inefficiencies and accessibi
 5. Barriers for residents with mobility issues or time constraints
 
 ## Solution Overview
+
 This web application digitizes and streamlines barangay services through a user-friendly online platform that:
 
 - Provides 24/7 access to barangay services
@@ -21,7 +23,9 @@ This web application digitizes and streamlines barangay services through a user-
 ## Core User Journeys
 
 ### For Residents
+
 1. **Document Request Process**
+
    - Register/login to the platform
    - Select document type needed
    - Fill required information
@@ -30,6 +34,7 @@ This web application digitizes and streamlines barangay services through a user-
    - Download/collect approved document
 
 2. **Appointment Booking**
+
    - Browse available appointment slots
    - Select preferred date/time
    - Provide purpose details
@@ -37,12 +42,14 @@ This web application digitizes and streamlines barangay services through a user-
    - Get reminders before appointment
 
 3. **Profile Management**
+
    - Create and verify resident profile
    - Update personal information
    - View history of requests and appointments
    - Manage notification preferences
 
 4. **Ticket Submission**
+
    - Report concerns or issues
    - Upload supporting evidence (photos, documents)
    - Track ticket status
@@ -54,19 +61,23 @@ This web application digitizes and streamlines barangay services through a user-
    - Access emergency contact information
 
 ### For Administrators
+
 1. **Request Management**
+
    - Review incoming document requests
    - Process and approve/reject with comments
    - Generate requested documents
    - Track processing metrics
 
 2. **Appointment Administration**
+
    - Configure available time slots
    - Review and confirm appointments
    - Reschedule when necessary
    - Send notifications to residents
 
 3. **User Management**
+
    - Verify resident accounts
    - Manage user roles and permissions
    - Address account issues
@@ -81,6 +92,7 @@ This web application digitizes and streamlines barangay services through a user-
 ## User Experience Goals
 
 ### For Residents
+
 - **Simplicity**: Intuitive interface requiring minimal technical knowledge
 - **Efficiency**: Complete tasks in fewer steps than traditional processes
 - **Transparency**: Clear visibility into process status and next steps
@@ -88,6 +100,7 @@ This web application digitizes and streamlines barangay services through a user-
 - **Trust**: Secure handling of personal information with clear privacy practices
 
 ### For Administrators
+
 - **Productivity**: Streamlined workflows that reduce administrative burden
 - **Organization**: Centralized management of requests, appointments, and records
 - **Insights**: Data-driven visibility into service performance and resident needs
@@ -95,6 +108,7 @@ This web application digitizes and streamlines barangay services through a user-
 - **Reliability**: Stable platform that maintains data integrity
 
 ## Success Metrics
+
 - Reduction in average processing time for document requests
 - Increase in number of services accessed outside traditional office hours
 - Decrease in in-person visits for routine services
