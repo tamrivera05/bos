@@ -1,0 +1,130 @@
+# Cline Rules for Barangay Online Services
+
+## Project Patterns
+
+### Code Style
+- Use TypeScript for all new files
+- Follow functional component pattern with arrow functions
+- Use explicit return types for functions
+- Use named exports for components
+- Use destructuring for props
+- Use the `cn()` utility for combining Tailwind classes
+
+### File Organization
+- Place components in feature-specific folders
+- Use index.ts files for clean exports
+- Keep component files focused on a single responsibility
+- Place shared utilities in src/lib
+- Place reusable hooks in src/lib/hooks
+
+### Naming Conventions
+- PascalCase for component files and component names
+- camelCase for utility functions and variables
+- kebab-case for CSS class names and file paths
+- Use descriptive, intention-revealing names
+
+### Component Structure
+- Use ShadCN UI components as base building blocks
+- Implement atomic design principles
+- Extract repeated patterns into reusable components
+- Keep components small and focused
+
+### Next.js Patterns
+- Use App Router for all routing
+- Use route groups (parentheses notation) to organize routes by feature
+- Use server components by default, mark with "use client" only when needed
+- Use layout components for shared UI across routes
+
+### Styling Approach
+- Use Tailwind utility classes directly in components
+- Use the cn() utility for conditional class names
+- Follow mobile-first responsive design
+- Use CSS variables for theming
+
+### Form Handling
+- Use controlled components for form inputs
+- Implement client-side validation
+- Provide immediate feedback for validation errors
+- Use consistent error message styling
+
+### State Management
+- Use React hooks for component state
+- Use context for shared state when needed
+- Keep state as close to where it's used as possible
+- Avoid prop drilling by using context or composition
+
+### Performance Considerations
+- Use Next.js Image component for images
+- Implement code splitting with dynamic imports for large components
+- Use server components for data-heavy pages
+- Minimize client-side JavaScript
+
+### Accessibility
+- Use semantic HTML elements
+- Include proper ARIA attributes
+- Ensure keyboard navigation works
+- Maintain sufficient color contrast
+- Test with screen readers
+
+## Workflow Preferences
+
+### Development Process
+- Start with component design before implementation
+- Create reusable components before page components
+- Implement mobile view first, then adapt for larger screens
+- Test components in isolation before integration
+
+### Documentation
+- Document component props with JSDoc comments
+- Keep memory bank updated with architectural decisions
+- Document complex logic with inline comments
+- Update progress.md after completing features
+
+### Testing Strategy
+- Write tests for critical user flows
+- Test edge cases and error states
+- Ensure responsive design works across breakpoints
+- Verify accessibility compliance
+
+## Project-Specific Guidelines
+
+### Feature Implementation Order
+1. Core infrastructure and layouts
+2. Authentication and user profiles
+3. Document request system
+4. Appointment booking
+5. Barangay directory
+6. Ticket submission system
+7. Admin dashboard
+
+### Mock Data Strategy
+- Create realistic mock data for development
+- Store mock data in separate files
+- Simulate API response structure
+- Include edge cases in mock data
+
+### User Experience Priorities
+- Simplicity and clarity in UI
+- Responsive design for all screen sizes
+- Clear feedback for user actions
+- Guided flows for complex processes
+- Accessibility for all users
+
+### Performance Targets
+- First Contentful Paint < 1.5s
+- Time to Interactive < 3.5s
+- Lighthouse performance score > 90
+- Bundle size < 200KB (initial load)
+
+## Known Challenges
+
+### Technical Limitations
+- Frontend-only development requires mock data
+- No actual backend integration in initial phases
+- Need to simulate authentication flows
+
+### Design Considerations
+- Balance between feature richness and simplicity
+- Accommodate varying levels of user technical proficiency
+- Design for potentially poor internet connectivity
+- Support for both English and Filipino languages (future)
