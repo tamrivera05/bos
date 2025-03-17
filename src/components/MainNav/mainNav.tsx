@@ -97,7 +97,7 @@ export function MainNav() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[240px] sm:w-[300px]">
-              <nav className="flex flex-col gap-4 pt-8">
+              <nav className="flex flex-col gap-4 mx-6 my-12">
                 {navItems.map((item) => (
                   <Link
                     key={item.name}

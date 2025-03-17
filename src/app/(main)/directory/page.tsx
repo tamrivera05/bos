@@ -103,8 +103,8 @@ export default function Directory() {
   ]
 
   return (
-    <div className="container py-10 mx-auto">
-      <h1 className="text-4xl font-extrabold text-center mb-2 text-[#1F2937]">Barangay Directory</h1>
+    <div className="container py-10 mx-auto px-8">
+      <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-2 text-[#1F2937]">Barangay Directory</h1>
       <p className="text-muted-foreground text-center mb-8">Meet our dedicated Barangay Officials and Staff members</p>
 
       <Tabs defaultValue="officials" className="w-full">
