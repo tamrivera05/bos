@@ -1,9 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Check,
-  Loader2,
-} from "lucide-react";
+import { AlertTriangle, ArrowDown, Check, Loader2, Minus } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -31,6 +28,7 @@ const TicketForm = () => {
   const form = useForm<z.infer<typeof TicketSchema>>({
     resolver: zodResolver(TicketSchema),
     defaultValues: {
+      priority: "low",
       subject: "",
       description: "",
     },
@@ -64,6 +62,67 @@ const TicketForm = () => {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="priority"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Priority Level</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="grid grid-cols-1 gap-4 sm:grid-cols-3"
+                    >
+                      <FormItem>
+                        <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
+                          <FormControl>
+                            <RadioGroupItem value="low" className="sr-only" />
+                          </FormControl>
+                          <div className="flex w-full cursor-pointer flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground">
+                            <ArrowDown className="mb-3 h-6 w-6 text-green-500" />
+                            <span className="text-center text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                              Low
+                            </span>
+                          </div>
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem>
+                        <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
+                          <FormControl>
+                            <RadioGroupItem
+                              value="medium"
+                              className="sr-only"
+                            />
+                          </FormControl>
+                          <div className="flex w-full cursor-pointer flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground">
+                            <Minus className="mb-3 h-6 w-6 text-amber-500" />
+                            <span className="text-center text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                              Medium
+                            </span>
+                          </div>
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem>
+                        <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
+                          <FormControl>
+                            <RadioGroupItem value="high" className="sr-only" />
+                          </FormControl>
+                          <div className="flex w-full cursor-pointer flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground">
+                            <AlertTriangle className="mb-3 h-6 w-6 text-red-500" />
+                            <span className="text-center text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                              High
+                            </span>
+                          </div>
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="subject"
