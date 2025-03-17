@@ -153,9 +153,36 @@ src/
 
 ### Authentication Pattern
 
-- **JWT Tokens**: For secure authentication (future implementation)
-- **Protected Routes**: Middleware for route protection
-- **Role-Based Access**: Different interfaces for residents vs administrators
+- **JWT Tokens**: Implemented with secure authentication flow
+  ```mermaid
+  flowchart TD
+      Login[Login Form] --> Validate[Validate Credentials]
+      Validate --> API[API Request]
+      API --> JWT[Receive JWT]
+      JWT --> Store[Store Token]
+      
+      Request[Protected Request] --> Check[Check Token]
+      Check -->|Valid| Proceed[Make Request]
+      Check -->|Invalid| Refresh[Refresh Token]
+      Refresh -->|Success| NewJWT[New Token]
+      Refresh -->|Failed| Redirect[Redirect to Login]
+  ```
+- **Form Validation**: Using Zod schema for login form validation
+  ```typescript
+  const loginSchema = z.object({
+    login: z.string().min(1, 'Username or email is required'),
+    password: z.string().min(1, 'Password is required'),
+  })
+  ```
+- **API Integration**: Using custom useApiFetch hook for API requests
+  ```typescript
+  const { fetch } = useApiFetch('/api/v1/auth/login', {
+    method: 'POST',
+    body: loginData
+  })
+  ```
+- **Protected Routes**: Middleware for route protection (in progress)
+- **Role-Based Access**: Different interfaces for residents vs administrators (planned)
 
 ## Component Relationships
 

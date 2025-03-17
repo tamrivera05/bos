@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Button } from "../../../components/ui/button";
-import { Input } from "../../../components/ui/input";
 import {
   Form,
   FormControl,
@@ -15,45 +15,63 @@ import {
   FormLabel,
   FormMessage,
 } from "../../../components/ui/form";
+import { Input } from "../../../components/ui/input";
+import { useApiFetch } from "../../../lib/hooks/useApiFetch";
 import { loginSchema, type LoginFormValues } from "./log-in-schema";
 
 export const LogInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const apiFetch = useApiFetch();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
+      login: "",
       password: "",
     },
   });
 
-  function onSubmit(values: LoginFormValues) {
+  async function onSubmit(values: LoginFormValues) {
     setIsLoading(true);
+    form.clearErrors(); // Clear previous errors
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log(values);
-      // For demo purposes, hardcoded credentials check
-      if (
-        values.email === "admin@example.com" &&
-        values.password === "password123"
-      ) {
-        // Successful login
-        console.log("Login successful", values);
-        // Navigate to dashboard
+    try {
+      const response = await apiFetch("/auth/login", {
+        method: "POST",
+        skipAuth: true, // Skip auth for login request
+        body: JSON.stringify({
+          login: values.login,
+          password: values.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Login successful
+        toast("Login successful");
+        localStorage.setItem("authToken", data.data.authorization.token);
         router.push("/directory");
       } else {
-        // Failed login
-        console.error("Invalid credentials");
+        // Login failed
+        console.log("Login failed", data);
         form.setError("root", {
-          message: "Invalid email or password",
+          message:
+            data.error?.message ||
+            "Login failed. Please check your credentials.",
         });
       }
+    } catch (error) {
+      console.log("Login error:", error);
+      form.setError("root", {
+        message:
+          "Login failed. Please check your credentials and network connection.",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   }
 
   return (
@@ -63,7 +81,7 @@ export const LogInForm = () => {
           Login
         </div>
         <div className="pt-2 font-normal text-gray-600 lg:text-lg">
-          Enter your email and password to access your account
+          Enter your username and password to access your account
         </div>
       </div>
       <Form {...form}>
@@ -71,12 +89,12 @@ export const LogInForm = () => {
           <div className="flex flex-col gap-6">
             <FormField
               control={form.control}
-              name="email"
+              name="login"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#1F2937]">Email</FormLabel>
+                  <FormLabel className="text-[#1F2937]">Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="name@example.com" {...field} />
+                    <Input placeholder="username" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -143,7 +161,8 @@ export const LogInForm = () => {
           </Button>
 
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            Don't have an account? <Button
+            Don't have an account?{" "}
+            <Button
               variant="link"
               type="button"
               className="p-0 font-normal"

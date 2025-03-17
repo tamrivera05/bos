@@ -19,6 +19,7 @@
 
 - **ShadCN** - Component library (implied in project brief, not yet implemented in dependencies)
 - **Lucide React** - Icon library
+- **Sonner** - Toast notifications
 
 ### Development Tools
 
@@ -45,7 +46,8 @@
 ### Frontend-Only Scope
 
 - This project is focused solely on frontend development
-- Backend services will need to be integrated separately or mocked for development
+- Backend services are integrated through RESTful API endpoints
+- JWT-based authentication for secure communication
 
 ### Performance Considerations
 
@@ -78,7 +80,9 @@
   "react": "^19.0.0",
   "react-dom": "^19.0.0",
   "tailwind-merge": "^3.0.2",
-  "tailwindcss-animate": "^1.0.7"
+  "tailwindcss-animate": "^1.0.7",
+  "zod": "^3.22.4",
+  "sonner": "^1.4.3"
 }
 ```
 
@@ -98,37 +102,42 @@
 }
 ```
 
-## Future Technical Considerations
+## Current Technical Considerations
 
 ### Authentication
 
-- Will need to implement secure authentication for residents and administrators
-- Consider integration with government ID verification systems
+- JWT-based authentication implemented with refresh token mechanism
+- Custom useApiFetch hook for API integration
+- Form validation using Zod schema
+- Protected routes implementation in progress
+- Role-based access control planned for user/admin interfaces
+- Token storage and refresh handling
 
 ### Form Handling
 
-- Will need form validation and state management libraries
-- Consider React Hook Form and Zod for form validation
+- Using Zod for form validation and type safety
+- Controlled form components with immediate validation
+- Error handling with toast notifications
+- Form submission with loading states
 
 ### Data Management
 
-- Will need state management for complex UI interactions
-- Consider React Context API or other state management solutions
+- Using React's built-in state management with hooks
+- Custom hooks for API integration and data fetching
+- Plan to implement React Context for global state if needed
 
 ### API Integration
 
-- Will need to connect to backend services for data persistence
-- Consider implementing API client with fetch or axios
-
-### File Uploads
-
-- Will need to handle document uploads for supporting evidence
-- Consider implementing secure file upload and preview functionality
+- Custom useApiFetch hook for API requests
+- Error handling and response parsing
+- Loading states and optimistic updates
+- Type-safe API responses
 
 ### Notifications
 
-- Will need to implement notification system for updates
-- Consider web push notifications or email integration
+- Implemented toast notifications using Sonner
+- Loading states for form submissions
+- Error feedback for validation and API errors
 
 ## Development Practices
 
@@ -137,12 +146,14 @@
 - Feature-based folder structure
 - Reusable components in shared directories
 - Consistent naming conventions
+- Type-safe code with TypeScript
 
 ### Performance Optimization
 
 - Next.js Image component for optimized images
 - Code splitting and lazy loading
 - Minimizing client-side JavaScript
+- Efficient form validation with Zod
 
 ### Testing Strategy
 
