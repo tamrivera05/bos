@@ -143,8 +143,7 @@ export const LogInForm = () => {
           </Button>
 
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            Don't have an account?{" "}
-            <Button
+            Don't have an account? <Button
               variant="link"
               type="button"
               className="p-0 font-normal"

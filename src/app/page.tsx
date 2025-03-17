@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { RedirectType, redirect } from 'next/navigation';
 
-export default function Home() {
-  redirect("/log-in");
+export default function HomePage() {
+  redirect('/directory', RedirectType.replace);
 }
