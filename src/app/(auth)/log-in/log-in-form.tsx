@@ -140,8 +140,9 @@ export const LogInForm = () => {
             Don't have an account?{" "}
             <Button
               variant="link"
+              type="button"
               className="p-0 font-normal"
-              onClick={() => document.getElementById("")?.click()}
+              onClick={() => router.push("/sign-up")}
             >
               Sign up
             </Button>
