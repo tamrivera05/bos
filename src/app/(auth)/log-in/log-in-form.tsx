@@ -59,7 +59,9 @@ export const LogInForm = () => {
   return (
     <div className="mx-auto flex w-full flex-col gap-10 md:px-14 lg:px-44">
       <div>
-        <div className="text-2xl font-bold lg:text-4xl text-[#1F2937]">Login</div>
+        <div className="text-2xl font-bold text-[#1F2937] lg:text-4xl">
+          Login
+        </div>
         <div className="pt-2 font-normal text-gray-600 lg:text-lg">
           Enter your email and password to access your account
         </div>
@@ -132,7 +134,11 @@ export const LogInForm = () => {
             </div>
           )}
 
-          <Button type="submit" className="w-full bg-[#1F2937] " disabled={isLoading}>
+          <Button
+            type="submit"
+            className="w-full bg-[#1F2937]"
+            disabled={isLoading}
+          >
             {isLoading ? "Logging in..." : "Login"}
           </Button>
 

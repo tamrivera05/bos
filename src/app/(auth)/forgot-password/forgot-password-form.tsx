@@ -15,7 +15,10 @@ import {
   FormLabel,
   FormMessage,
 } from "../../../components/ui/form";
-import { forgotPasswordSchema, type forgotPasswordFormValues } from "./forgot-password-schema";
+import {
+  forgotPasswordSchema,
+  type forgotPasswordFormValues,
+} from "./forgot-password-schema";
 
 export const ForgotPasswordForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -34,10 +37,10 @@ export const ForgotPasswordForm = () => {
     setIsLoading(true);
     setTimeout(() => {
       console.log(values);
-        // Successful login
-        console.log("Password changed successfully", values);
-        // Navigate to dashboard
-        router.push("/dashboard");
+      // Successful login
+      console.log("Password changed successfully", values);
+      // Navigate to dashboard
+      router.push("/dashboard");
       setIsLoading(false);
     }, 1000);
   }
@@ -45,7 +48,9 @@ export const ForgotPasswordForm = () => {
   return (
     <div className="mx-auto flex w-full flex-col gap-10 md:px-14 lg:px-44">
       <div>
-        <div className="text-2xl font-bold lg:text-4xl text-[#1F2937]">Reset Password</div>
+        <div className="text-2xl font-bold text-[#1F2937] lg:text-4xl">
+          Reset Password
+        </div>
         <div className="pt-2 font-normal text-gray-600 lg:text-lg">
           Enter your new password
         </div>
@@ -53,74 +58,76 @@ export const ForgotPasswordForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
           <div className="flex flex-col gap-6">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#1F2937]">Password</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          type={showPassword ? "text" : "password"}
-                          {...field}
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          {showPassword ? (
-                            <EyeOff className="h-4 w-4 text-gray-500" />
-                          ) : (
-                            <Eye className="h-4 w-4 text-gray-500" />
-                          )}
-                          <span className="sr-only">
-                            {showPassword ? "Hide password" : "Show password"}
-                          </span>
-                        </Button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#1F2937]">Confirm Password</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          type={showPassword ? "text" : "password"}
-                          {...field}
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          {showPassword ? (
-                            <EyeOff className="h-4 w-4 text-gray-500" />
-                          ) : (
-                            <Eye className="h-4 w-4 text-gray-500" />
-                          )}
-                          <span className="sr-only">
-                            {showPassword ? "Hide password" : "Show password"}
-                          </span>
-                        </Button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#1F2937]">Password</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        {...field}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4 text-gray-500" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-gray-500" />
+                        )}
+                        <span className="sr-only">
+                          {showPassword ? "Hide password" : "Show password"}
+                        </span>
+                      </Button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#1F2937]">
+                    Confirm Password
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        {...field}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4 text-gray-500" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-gray-500" />
+                        )}
+                        <span className="sr-only">
+                          {showPassword ? "Hide password" : "Show password"}
+                        </span>
+                      </Button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           {form.formState.errors.root && (
@@ -129,7 +136,11 @@ export const ForgotPasswordForm = () => {
             </div>
           )}
 
-          <Button type="submit" className="w-full bg-[#1F2937] " disabled={isLoading}>
+          <Button
+            type="submit"
+            className="w-full bg-[#1F2937]"
+            disabled={isLoading}
+          >
             {isLoading ? "Confirming password..." : "Confirm"}
           </Button>
 

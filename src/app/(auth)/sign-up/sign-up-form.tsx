@@ -18,9 +18,19 @@ import {
 import { format } from "date-fns";
 import { Calendar } from "../../../components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "../../../components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components/ui/select";
-import { cn } from "@/lib/utils"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../../components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
+import { cn } from "@/lib/utils";
 import { signUpSchema, type SignUpFormValues } from "./sign-up-schema";
 
 export const SignUpForm = () => {
@@ -40,7 +50,7 @@ export const SignUpForm = () => {
       province: "",
       birthDate: new Date(),
       contactNumber: "",
-      gender: "Male", 
+      gender: "Male",
     },
   });
 
@@ -48,21 +58,22 @@ export const SignUpForm = () => {
     setIsLoading(true);
     setTimeout(() => {
       console.log(values);
-        // Successful login
-        console.log("Login successful", values);
-        // Navigate to dashboard
-        router.push("/dashboard");
+      // Successful login
+      console.log("Login successful", values);
+      // Navigate to dashboard
+      router.push("/dashboard");
       setIsLoading(false);
     }, 1000);
-  
   }
 
   return (
-    <div className="mx-auto flex w-full flex-col gap-10 md:px-14 lg:px-44 lg:py-16 overflow-auto">
+    <div className="mx-auto flex w-full flex-col gap-10 overflow-auto md:px-14 lg:px-44 lg:py-16">
       <div>
-        <div className="text-2xl font-bold lg:text-4xl text-[#1F2937]">Sign up</div>
+        <div className="text-2xl font-bold text-[#1F2937] lg:text-4xl">
+          Sign up
+        </div>
         <div className="pt-2 font-normal text-gray-600 lg:text-lg">
-        Enter your information to create a new account
+          Enter your information to create a new account
         </div>
       </div>
       <Form {...form}>
@@ -107,46 +118,49 @@ export const SignUpForm = () => {
                 </FormItem>
               )}
             />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[#1F2937]">Password</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          type={showPassword ? "text" : "password"}
-                          {...field}
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          {showPassword ? (
-                            <EyeOff className="h-4 w-4 text-gray-500" />
-                          ) : (
-                            <Eye className="h-4 w-4 text-gray-500" />
-                          )}
-                          <span className="sr-only">
-                            {showPassword ? "Hide password" : "Show password"}
-                          </span>
-                        </Button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[#1F2937]">Password</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        {...field}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4 text-gray-500" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-gray-500" />
+                        )}
+                        <span className="sr-only">
+                          {showPassword ? "Hide password" : "Show password"}
+                        </span>
+                      </Button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
               control={form.control}
               name="streetAddress"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#1F2937]"> Street Address</FormLabel>
+                  <FormLabel className="text-[#1F2937]">
+                    {" "}
+                    Street Address
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -187,36 +201,36 @@ export const SignUpForm = () => {
                 <FormItem>
                   <FormLabel className="text-[#1F2937]">Birthdate</FormLabel>
                   <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-full pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground",
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date("1900-01-01")
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                   <FormMessage />
                 </FormItem>
               )}
@@ -226,7 +240,9 @@ export const SignUpForm = () => {
               name="contactNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#1F2937]">Contact Number</FormLabel>
+                  <FormLabel className="text-[#1F2937]">
+                    Contact Number
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -241,15 +257,15 @@ export const SignUpForm = () => {
                 <FormItem>
                   <FormLabel className="text-[#1F2937]">Gender</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
+                    <FormControl>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Gender" />
                       </SelectTrigger>
-                  </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Male">Male</SelectItem>
-                        <SelectItem value="Female">Female</SelectItem>
-                      </SelectContent>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Male">Male</SelectItem>
+                      <SelectItem value="Female">Female</SelectItem>
+                    </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
@@ -263,7 +279,11 @@ export const SignUpForm = () => {
             </div>
           )}
 
-          <Button type="submit" className="w-full bg-[#1F2937] " disabled={isLoading}>
+          <Button
+            type="submit"
+            className="w-full bg-[#1F2937]"
+            disabled={isLoading}
+          >
             {isLoading ? "Signing up.." : "Sign up"}
           </Button>
 
