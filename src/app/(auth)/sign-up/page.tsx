@@ -11,12 +11,12 @@ const signUp = () => {
         Barangay Online Services
       </div>
 
-      <div className="hidden h-full w-1/2 flex-auto items-center justify-center lg:flex dark:border-l ">
+      <div className="hidden h-full w-1/2 flex-auto items-center justify-center lg:flex dark:border-l relative">
         <Image 
         src="/BOS 1.svg"
         alt="BOS Logo"
-        width={952}
-        height={1039}
+        fill={true}
+        style={{objectFit: "cover"}}
         />
       </div>
       <div className="mx-auto w-full max-w-md flex-col items-center justify-center sm:rounded-xl sm:bg-white sm:py-12 sm:pt-8 sm:shadow-md md:flex md:h-screen md:min-h-full md:w-1/2 md:max-w-none">
