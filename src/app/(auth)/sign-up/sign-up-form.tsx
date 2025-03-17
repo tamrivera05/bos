@@ -61,7 +61,7 @@ export const SignUpForm = () => {
       // Successful login
       console.log("Login successful", values);
       // Navigate to dashboard
-      router.push("/dashboard");
+      router.push("/directory");
       setIsLoading(false);
     }, 1000);
   }

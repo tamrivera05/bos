@@ -11,13 +11,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
-      <body>
-        <div className="relative flex min-h-screen flex-col">
+        <body className="relative flex min-h-screen flex-col">
           <MainNav />
           <main className="flex-1">{children}</main>
-        </div>
-      </body>
+        </body>
     </html>
   );
 }

@@ -40,7 +40,7 @@ export const ForgotPasswordForm = () => {
       // Successful login
       console.log("Password changed successfully", values);
       // Navigate to dashboard
-      router.push("/dashboard");
+      router.push("/directory");
       setIsLoading(false);
     }, 1000);
   }

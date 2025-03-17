@@ -44,7 +44,7 @@ export const LogInForm = () => {
         // Successful login
         console.log("Login successful", values);
         // Navigate to dashboard
-        router.push("/dashboard");
+        router.push("/directory");
       } else {
         // Failed login
         console.error("Invalid credentials");
