@@ -253,7 +253,7 @@ export default function DashboardPage() {
                       </TableCell>
                       <TableCell>
                         <Link
-                          href={`/tickets/${ticket.id}`}
+                          href={`/manage-tickets/${ticket.id}`}
                           className="hover:underline"
                         >
                           {ticket.title}
