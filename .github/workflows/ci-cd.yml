@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - '**'
+      - 'main'
   pull_request:
     branches:
       - '**'
@@ -19,6 +19,8 @@ jobs:
           node-version: '20.x'
       - name: Install dependencies
         run: npm install
+      - name: Run build
+        run: npm run build
       - name: Run linting
         run: npm run lint
 
@@ -32,6 +34,8 @@ jobs:
           node-version: '20.x'
       - name: Install dependencies
         run: npm install
+      - name: Run build
+        run: npm run build
       - name: Run type checking
         run: tsc --noEmit
 
