@@ -7,7 +7,7 @@ const TicketPage = () => {
       <div className="mx-auto max-w-3xl">
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold">Support Center</h1>
+            <h1 className="text-3xl font-extrabold text-[#1F2937]">Support Center</h1>
             <p className="mt-2 text-muted-foreground">
               Submit a ticket to get help from our support team
             </p>
