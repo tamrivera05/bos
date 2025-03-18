@@ -16,7 +16,7 @@ import { Separator } from "../ui/separator";
 const navItems = [
   { name: "Directory", href: "/directory" },
   { name: "Archive", href: "/archive" },
-  { name: "Appointments", href: "" },
+  { name: "Appointments", href: "/appointments" },
   { name: "Submission of Ticket", href: "/tickets" },
 ];
 
