@@ -243,9 +243,9 @@ export default function DocumentRequestsAdmin() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="approved">Approved</SelectItem>
-                  <SelectItem value="rejected">Rejected</SelectItem>
+                  <SelectItem value="open">Pending</SelectItem>
+                  <SelectItem value="delivered">Approved</SelectItem>
+                  <SelectItem value="cancelled">Rejected</SelectItem>
                 </SelectContent>
               </Select>
             </div>
