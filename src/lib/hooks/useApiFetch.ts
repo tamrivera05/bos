@@ -21,7 +21,13 @@ export function useApiFetch() {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
     if (!baseUrl) {
-      return { data: null, error: { code: "API_CONFIG_ERROR", message: "API URL not configured" } };
+      return { 
+        data: null, 
+        error: { 
+          code: "API_CONFIG_ERROR", 
+          message: "API URL not configured" 
+        } 
+      };
     }
 
     // Add authorization header if not skipping auth
@@ -44,13 +50,21 @@ export function useApiFetch() {
     try {
       const response = await fetch(`${baseUrl}${endpoint}`, fetchOptions);
 
+      // Try to parse response as JSON first
+      let responseData;
+      try {
+        responseData = await response.json();
+      } catch {
+        responseData = null;
+      }
+
+      // If response is not ok, handle error
       if (!response.ok) {
         // Handle 401 Unauthorized error
         if (response.status === 401) {
           try {
             const refreshed = await refreshToken();
             if (refreshed) {
-              // Retry the original request with the new token
               const token = localStorage.getItem("authToken");
               if (token) {
                 const newOptions = {
@@ -69,36 +83,72 @@ export function useApiFetch() {
             }
             localStorage.removeItem("authToken");
             router.push("/log-in");
-            return { data: null, error: { code: "SESSION_EXPIRED", message: "Session expired. Please log in again." } };
+            return { 
+              data: null, 
+              error: responseData?.error || { 
+                code: "AUTH_002", 
+                message: "Token expired. Please log in again." 
+              }
+            };
           } catch {
             localStorage.removeItem("authToken");
             router.push("/log-in");
-            return { data: null, error: { code: "SESSION_EXPIRED", message: "Session expired. Please log in again." } };
+            return { 
+              data: null, 
+              error: { 
+                code: "AUTH_002", 
+                message: "Token expired. Please log in again." 
+              }
+            };
           }
         }
 
-        try {
-          const errorData = await response.json() as { success: boolean, error: { code: string, message: string } };
-          if (!errorData.success && errorData.error && errorData.error.code && errorData.error.message) {
-            return { data: null, error: errorData.error };
-          } else {
-            const message = `HTTP error! status: ${response.status}`;
-            console.error("API request failed:", message);
-            return { data: null, error: { code: "HTTP_ERROR", message: message } };
-          }
-        } catch {
-          const message = `HTTP error! status: ${response.status}`;
-          console.error("API request failed:", message);
-          return { data: null, error: { code: "HTTP_ERROR", message: message } };
+        // If we have a properly formatted error response from the server, use it
+        if (responseData?.success === false && responseData?.error?.code && responseData?.error?.message) {
+          return { 
+            data: null, 
+            error: responseData.error 
+          };
         }
+
+        // Otherwise, return a generic HTTP error
+        const message = `HTTP error! status: ${response.status}`;
+        console.error("API request failed:", message);
+        return { 
+          data: null, 
+          error: { 
+            code: "HTTP_ERROR", 
+            message: message 
+          }
+        };
       }
 
-      const data = await response.json() as T;
-      return { data, error: null };
+      // If response is ok but we couldn't parse the JSON, that's an error
+      if (!responseData) {
+        return { 
+          data: null, 
+          error: { 
+            code: "PARSE_ERROR", 
+            message: "Failed to parse server response" 
+          }
+        };
+      }
+
+      // Success case
+      return { 
+        data: responseData as T, 
+        error: null 
+      };
 
     } catch (error) {
       console.error("API request failed:", error);
-      return { data: null, error: { code: "FETCH_ERROR", message: String(error) } };
+      return { 
+        data: null, 
+        error: { 
+          code: "FETCH_ERROR", 
+          message: String(error) 
+        }
+      };
     }
   }, [router]);
 
@@ -120,13 +170,18 @@ async function refreshToken(): Promise<boolean> {
       },
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      if (data.token) {
-        localStorage.setItem("authToken", data.token);
-        return true;
-      }
+    let responseData;
+    try {
+      responseData = await response.json();
+    } catch {
+      return false;
     }
+
+    if (response.ok && responseData?.token) {
+      localStorage.setItem("authToken", responseData.token);
+      return true;
+    }
+
     return false;
   } catch (error) {
     console.error("Token refresh failed:", error);
