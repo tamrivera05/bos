@@ -74,16 +74,6 @@ export default function AppointmentsForm() {
       try {
         setIsSubmitting(true);
 
-        console.log(
-          JSON.stringify({
-            appointment_date: format(values.date, 'yyyy-MM-dd'),
-            appointment_time: values.timeSlot
-              ? format(new Date(`1970-01-01T${values.timeSlot}`), 'HH:mm')
-              : '',
-            reason: values.notes || ''
-          })
-        );
-
         if (!values.date || !values.timeSlot) {
           toast.error('Please select both date and time');
           return;
@@ -120,7 +110,7 @@ export default function AppointmentsForm() {
         }, 2000);
       } catch (error) {
         toast.error('An unexpected error occurred');
-        console.error('Appointment submission error:', error);
+        console.log('Appointment submission error:', error);
       } finally {
         setIsSubmitting(false);
       }
