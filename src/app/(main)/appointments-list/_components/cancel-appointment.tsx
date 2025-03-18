@@ -14,6 +14,7 @@ import { useApiFetch } from '@/lib/hooks/useApiFetch';
 import { Trash2 } from 'lucide-react';
 import { FC, useCallback, useState } from 'react';
 import { toast } from 'sonner';
+import { useSWRConfig } from 'swr';
 
 interface CancelAppointmentProps {
   appointmentId: number;
@@ -22,6 +23,7 @@ interface CancelAppointmentProps {
 const CancelAppointment: FC<CancelAppointmentProps> = ({ appointmentId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const apiFetch = useApiFetch();
+  const { mutate } = useSWRConfig();
 
   const onDelete = useCallback(
     async (values: number) => {
@@ -38,11 +40,15 @@ const CancelAppointment: FC<CancelAppointmentProps> = ({ appointmentId }) => {
         });
       }
 
+      // Success case
+      setIsLoading(false);
       toast('Appointment deleted', {
         description: 'The appointment has been successfully deleted.'
       });
+      // Refresh appointments list
+      mutate('/appointments');
     },
-    [apiFetch]
+    [apiFetch, mutate]
   );
 
   return (
