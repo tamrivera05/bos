@@ -1,14 +1,23 @@
-"use client"
+'use server';
 
-import DocumentRequestForm from "./document-request-form"
+import DocumentRequestForm from './document-request-form';
 
-export default function DocumentRequest () {
-    return (
-        <div className="container mx-auto py-10 px-6">
-            <h1 className="text-3xl md:text-4xl font-extrabold mb-2 text-center text-[#1F2937]">Document Request Form</h1>
-            <p className="text-muted-foreground text-center mb-8">Fill out this form to request official documents from the barangay office.</p>
+import React from 'react';
 
-            <DocumentRequestForm />
-        </div>
-    )
-}
+const DocumentRequest = () => {
+  return (
+    <div className="container mx-auto px-6 py-10">
+      <h1 className="mb-2 text-center text-3xl font-extrabold text-[#1F2937] md:text-4xl">
+        Document Request Form
+      </h1>
+      <p className="mb-8 text-center text-muted-foreground">
+        Fill out this form to request official documents from the barangay
+        office.
+      </p>
+
+      <DocumentRequestForm />
+    </div>
+  );
+};
+
+export default DocumentRequest;
