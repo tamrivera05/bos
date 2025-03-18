@@ -8,7 +8,6 @@ import { MainNav } from '../../components/MainNav/mainNav';
 const MainLayout = async ({ children }: { children: ReactNode }) => {
   const isAuthenticated = await checkAuthenticationStatus();
 
-  console.log(isAuthenticated);
   if (!isAuthenticated) {
     redirect('/log-in');
   }
