@@ -66,7 +66,7 @@ const documentImages = {
                   name="fullName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel className="text-[#1F2937]">Full Name</FormLabel>
                       <FormControl>
                         <Input placeholder="Juan Dela Cruz" {...field} />
                       </FormControl>
@@ -80,7 +80,7 @@ const documentImages = {
                   name="address"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Complete Address</FormLabel>
+                      <FormLabel className="text-[#1F2937]">Complete Address</FormLabel>
                       <FormControl>
                         <Textarea placeholder="123 Main St, Barangay Example, City, Province" {...field} />
                       </FormControl>
@@ -95,7 +95,7 @@ const documentImages = {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email Address</FormLabel>
+                        <FormLabel className="text-[#1F2937]">Email Address</FormLabel>
                         <FormControl>
                           <Input placeholder="juan@example.com" type="email" {...field} />
                         </FormControl>
@@ -109,7 +109,7 @@ const documentImages = {
                     name="contactNumber"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Contact Number</FormLabel>
+                        <FormLabel className="text-[#1F2937]">Contact Number</FormLabel>
                         <FormControl>
                           <Input placeholder="09123456789" {...field} />
                         </FormControl>
@@ -124,7 +124,7 @@ const documentImages = {
                   name="birthdate"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Date of Birth</FormLabel>
+                      <FormLabel className="text-[#1F2937]">Date of Birth</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -157,7 +157,7 @@ const documentImages = {
                   name="documentType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Document Type</FormLabel>
+                      <FormLabel className="text-[#1F2937]">Document Type</FormLabel>
                       <Select
                         onValueChange={(value) => {
                           field.onChange(value)
@@ -207,7 +207,7 @@ const documentImages = {
                   name="purpose"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Purpose of Request</FormLabel>
+                      <FormLabel className="text-[#1F2937]">Purpose of Request</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Please explain why you need this document..."
@@ -221,7 +221,7 @@ const documentImages = {
                   )}
                 />
   
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full bg-[#1F2937]">
                   Submit Request
                 </Button>
               </form>
