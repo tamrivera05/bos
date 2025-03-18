@@ -1,22 +1,18 @@
 import { z } from "zod";
 
 export const signUpSchema = z.object({
-  name: z.string().min(1, { message: "Please enter a valid name" }),
-  username: z.string().min(1, { message: "Please enter a valid username" }),
-  email: z.string().email({ message: "Please enter a valid email" }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters",
+  name: z.string().min(1, "Full name is required"),
+  username: z.string().min(1, "Username is required"),
+  email: z.string().min(1, "Email is required").email("Invalid email format"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  street_address: z.string().min(1, "Street address is required"),
+  city: z.string().min(1, "City is required"),
+  province: z.string().min(1, "Province is required"),
+  birth_date: z.string().min(1, "Birth date is required"),
+  contact_number: z.string().min(1, "Contact number is required"),
+  gender: z.enum(["male", "female"], {
+    errorMap: () => ({ message: "Please select a gender" }),
   }),
-  streetAddress: z
-    .string()
-    .min(1, { message: "Please enter a valid street address" }),
-  city: z.string().min(1, { message: "Please enter a valid city" }),
-  province: z.string().min(1, { message: "Please enter a valid province" }),
-  birthDate: z.date(),
-  contactNumber: z
-    .string()
-    .min(1, { message: "Please enter a valid contact number" }),
-  gender: z.enum(["Male", "Female"]),
 });
 
 export type SignUpFormValues = z.infer<typeof signUpSchema>;

@@ -31,6 +31,8 @@ import {
   SelectValue,
 } from "../../../components/ui/select";
 import { cn } from "@/lib/utils";
+import { useUserStore } from "@/stores/user-store";
+import { toast } from "sonner";
 import { signUpSchema, type SignUpFormValues } from "./sign-up-schema";
 
 export const SignUpForm = () => {
@@ -45,25 +47,54 @@ export const SignUpForm = () => {
       username: "",
       email: "",
       password: "",
-      streetAddress: "",
+      street_address: "",
       city: "",
       province: "",
-      birthDate: new Date(),
-      contactNumber: "",
-      gender: "Male",
+      birth_date: "",
+      contact_number: "",
+      gender: "male",
     },
   });
 
-  function onSubmit(values: SignUpFormValues) {
+  async function onSubmit(values: SignUpFormValues) {
     setIsLoading(true);
-    setTimeout(() => {
-      console.log(values);
-      // Successful login
-      console.log("Login successful", values);
-      // Navigate to dashboard
-      router.push("/directory");
+    form.clearErrors(); // Clear previous errors
+
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Registration successful
+        toast("Registration successful");
+        localStorage.setItem("authToken", data.data.authorization.token);
+        useUserStore.getState().setUser(data.data.user);
+        router.push("/directory");
+      } else {
+        // Registration failed
+        console.log("Registration failed", data);
+        form.setError("root", {
+          message:
+            data.error?.message ||
+            "Registration failed. Please check your input.",
+        });
+      }
+    } catch (error) {
+      console.log("Registration error:", error);
+      form.setError("root", {
+        message:
+          "Registration failed. Please check your input and network connection.",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   }
 
   return (
@@ -154,7 +185,7 @@ export const SignUpForm = () => {
             />
             <FormField
               control={form.control}
-              name="streetAddress"
+              name="street_address"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#1F2937]">
@@ -196,7 +227,7 @@ export const SignUpForm = () => {
             />
             <FormField
               control={form.control}
-              name="birthDate"
+              name="birth_date"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#1F2937]">Birthdate</FormLabel>
@@ -211,7 +242,7 @@ export const SignUpForm = () => {
                           )}
                         >
                           {field.value ? (
-                            format(field.value, "PPP")
+                            field.value
                           ) : (
                             <span>Pick a date</span>
                           )}
@@ -222,8 +253,12 @@ export const SignUpForm = () => {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
+                        selected={field.value ? new Date(field.value) : undefined}
+                        onSelect={(date) => {
+                          if (date) {
+                            field.onChange(format(date, 'yyyy-MM-dd'));
+                          }
+                        }}
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
@@ -237,7 +272,7 @@ export const SignUpForm = () => {
             />
             <FormField
               control={form.control}
-              name="contactNumber"
+              name="contact_number"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#1F2937]">
@@ -263,8 +298,8 @@ export const SignUpForm = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Male">Male</SelectItem>
-                      <SelectItem value="Female">Female</SelectItem>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -294,7 +329,7 @@ export const SignUpForm = () => {
               className="p-0 font-normal"
               onClick={() => router.push("/log-in")}
             >
-              Sign up
+              Log in
             </Button>
           </div>
         </form>

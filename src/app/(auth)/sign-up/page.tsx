@@ -1,8 +1,8 @@
-"use client";
+'use server';
 
-import React from "react";
-import SignUpForm from "./sign-up-form";
-import Image from "next/image";
+import React from 'react';
+import SignUpForm from './sign-up-form';
+import Image from 'next/image';
 
 const signUp = () => {
   return (
@@ -16,7 +16,7 @@ const signUp = () => {
           src="/BOS 1.svg"
           alt="BOS Logo"
           fill={true}
-          style={{ objectFit: "cover" }}
+          style={{ objectFit: 'cover' }}
         />
       </div>
       <div className="mx-auto w-full max-w-md flex-col items-center justify-center sm:rounded-xl sm:bg-white sm:py-12 sm:pt-8 sm:shadow-md md:flex md:h-screen md:min-h-full md:w-1/2 md:max-w-none">
