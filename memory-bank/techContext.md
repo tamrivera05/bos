@@ -106,12 +106,39 @@
 
 ### Authentication
 
-- JWT-based authentication implemented with refresh token mechanism
-- Custom useApiFetch hook for API integration
+#### JWT Management System
+- Dual-storage approach:
+  - HTTP-only cookies for enhanced security
+  - localStorage for client-side API requests
+- Token refresh mechanism through `/api/refresh-token` endpoint
+- Automatic refresh on 401 responses
+
+#### Next.js API Routes
+- `/api/login` route for authentication
+- `/api/refresh-token` route for token renewal
+- Secure cookie configuration:
+  - HTTP-only flag
+  - Secure flag in production
+  - SameSite lax for CSRF protection
+
+#### API Integration
+- Custom useApiFetch hook for backend API requests
+  - Automatic token inclusion from localStorage
+  - Token refresh handling
+  - Error handling and retry logic
+- Standard fetch for Next.js API routes
 - Form validation using Zod schema
-- Protected routes implementation in progress
-- Role-based access control planned for user/admin interfaces
-- Token storage and refresh handling
+
+#### Security Features
+- XSS protection via HTTP-only cookies
+- CSRF protection via SameSite cookie attribute
+- Automatic token refresh mechanism
+- Secure token storage strategy
+
+#### Work in Progress
+- Protected routes implementation
+- Role-based access control for user/admin interfaces
+- Comprehensive error handling
 
 ### Form Handling
 

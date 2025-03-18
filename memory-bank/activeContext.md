@@ -13,8 +13,13 @@ The project is streamlining the appointment management system for users, removin
 - Implemented login form with validation using Zod schema
 - Created useApiFetch hook for API integration
 - Set up authentication flow with backend JWT system
+<<<<<<< Updated upstream
 - Refactored appointments-list to focus on user functionality, removing admin features
 - Added TypeScript interfaces for better type safety in appointments management
+=======
+- Implemented secure JWT management with HTTP-only cookies and localStorage
+- Created Next.js API routes for login and token refresh
+>>>>>>> Stashed changes
 
 ## Current Status
 
@@ -28,15 +33,27 @@ The project has moved beyond initial setup and is now implementing core function
 - Root layout with Geist font
 - Login form with validation
 - API integration hook
+<<<<<<< Updated upstream
 - Authentication system foundation
 - User-focused appointment listing and management
+=======
+- Authentication system with dual JWT storage:
+  - HTTP-only cookies for enhanced security
+  - localStorage for client-side compatibility
+- Next.js API routes:
+  - /api/login for authentication
+  - /api/refresh-token for token renewal
+>>>>>>> Stashed changes
 
 ### In Progress
 
-- User authentication flow completion
 - Protected routes implementation
 - Error handling for authentication edge cases
+<<<<<<< Updated upstream
 - Admin functionalities in separate directory
+=======
+- Testing authentication flow in different scenarios
+>>>>>>> Stashed changes
 
 ## Next Steps
 

@@ -153,20 +153,38 @@ src/
 
 ### Authentication Pattern
 
-- **JWT Tokens**: Implemented with secure authentication flow
+- **JWT Management**: Dual-storage approach for enhanced security and compatibility
   ```mermaid
   flowchart TD
-      Login[Login Form] --> Validate[Validate Credentials]
-      Validate --> API[API Request]
-      API --> JWT[Receive JWT]
-      JWT --> Store[Store Token]
+      Login[Login Form] --> NextAPI[Next.js /api/login]
+      NextAPI --> BackendAPI[Backend Login API]
+      BackendAPI --> JWT[Receive JWT]
+      JWT --> Store[Store JWT]
       
-      Request[Protected Request] --> Check[Check Token]
-      Check -->|Valid| Proceed[Make Request]
-      Check -->|Invalid| Refresh[Refresh Token]
-      Refresh -->|Success| NewJWT[New Token]
-      Refresh -->|Failed| Redirect[Redirect to Login]
+      Store --> Cookie[HTTP-only Cookie]
+      Store --> Local[localStorage]
+      
+      subgraph "API Requests"
+        ClientReq[Client Request] --> Check[Check Token]
+        Check -->|Valid| Proceed[Make Request]
+        Check -->|Invalid| Refresh[Call /api/refresh-token]
+        Refresh --> NewJWT[New JWT]
+        NewJWT --> UpdateStore[Update Both Storages]
+        NewJWT -->|Failed| Redirect[Redirect to Login]
+      end
   ```
+
+- **Next.js API Routes**:
+  ```typescript
+  // /api/login route
+  const response = NextResponse.json({ token });
+  response.cookies.set('authToken', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  });
+  ```
+
 - **Form Validation**: Using Zod schema for login form validation
   ```typescript
   const loginSchema = z.object({
@@ -174,13 +192,30 @@ src/
     password: z.string().min(1, 'Password is required'),
   })
   ```
-- **API Integration**: Using custom useApiFetch hook for API requests
+
+- **API Integration**: 
+  - Next.js API routes use standard `fetch`
+  - External API calls use `useApiFetch` hook with token from localStorage
   ```typescript
-  const { fetch } = useApiFetch('/api/v1/auth/login', {
+  // Client-side form submission
+  const response = await fetch('/api/login', {
     method: 'POST',
-    body: loginData
-  })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(loginData)
+  });
   ```
+
+- **Token Refresh Flow**:
+  - Automatic refresh on 401 responses
+  - Updates both HTTP-only cookie and localStorage
+  - Managed through `/api/refresh-token` endpoint
+
+- **Security Considerations**:
+  - HTTP-only cookies prevent XSS attacks
+  - Secure flag in production
+  - Proper CSRF protection with lax SameSite
+  - Token refresh mechanism for session management
+
 - **Protected Routes**: Middleware for route protection (in progress)
 - **Role-Based Access**: Different interfaces for residents vs administrators (planned)
 
