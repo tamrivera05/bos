@@ -165,12 +165,9 @@ export default function AppointmentsForm() {
                             setSelectedDate(date || null);
                           }}
                           disabled={(date) => {
-                            // Disable past dates and weekends in this example
+                            // Disable past dates
                             return (
-                              date <
-                                new Date(new Date().setHours(0, 0, 0, 0)) ||
-                              date.getDay() === 0 ||
-                              date.getDay() === 6
+                              date < new Date(new Date().setHours(0, 0, 0, 0))
                             );
                           }}
                           initialFocus

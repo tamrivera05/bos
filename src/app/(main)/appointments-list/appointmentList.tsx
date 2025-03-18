@@ -13,6 +13,7 @@ import { Calendar, Clock } from 'lucide-react';
 import useSWR from 'swr';
 import { getStatusBadge } from './_components/appointment-badge';
 import CancelAppointment from './_components/cancel-appointment';
+import ChangeStatus from './_components/change-status';
 
 interface User {
   id: number;
@@ -48,7 +49,7 @@ interface AppointmentResponse {
   data: Appointment[];
 }
 
-const AppointmentList = () => {
+const AppointmentList = ({ isAdmin }: { isAdmin: boolean }) => {
   const { data: appointments, error } =
     useSWR<AppointmentResponse>('/appointments');
 
@@ -103,7 +104,16 @@ const AppointmentList = () => {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between pt-0">
-              <CancelAppointment appointmentId={appointment.id} />
+              {isAdmin === false && (
+                <CancelAppointment appointmentId={appointment.id} />
+              )}
+
+              {isAdmin && (
+                <ChangeStatus
+                  currentStatus={appointment.status}
+                  appointmentId={appointment.id}
+                />
+              )}
             </CardFooter>
           </Card>
         ))}
