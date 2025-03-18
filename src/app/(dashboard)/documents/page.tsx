@@ -54,9 +54,9 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { ApiResponse } from '@/lib/apiFetch';
+import { apiFetch, ApiResponse } from '@/lib/apiFetch';
 import { toast } from 'sonner';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import { Document, DocumentStatus } from '../../../../types/database';
 
 interface DocumentRequest {
@@ -83,6 +83,7 @@ export default function DocumentRequestsAdmin() {
     useState<DocumentRequest | null>(null);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const router = useRouter();
+  const { mutate } = useSWRConfig();
 
   const { data } = useSWR<ApiResponse<Document[]>>('/documents');
 
@@ -108,21 +109,24 @@ export default function DocumentRequestsAdmin() {
 
   // Update document status (using mock data)
   const updateDocumentStatus = async (id: number, status: DocumentStatus) => {
-    // Simulate API delay
-    setIsLoading(true);
-    setTimeout(() => {
-      // Update local state
-      const updatedDocs = documents.map((doc) =>
-        doc.id === id ? { ...doc, status } : doc
-      );
-      setDocuments(updatedDocs);
+    const { error } = await apiFetch(`/documents/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status })
+    });
 
-      // Apply filters again
-      applyFilters(searchQuery, statusFilter, updatedDocs);
-
-      toast.success('Status Updated');
+    if (error) {
       setIsLoading(false);
-    }, 500);
+      return toast.error('Failed to update status');
+    }
+
+    // success
+    // refresh cache
+    mutate('/documents');
+
+    // apply filters again
+    applyFilters(searchQuery, statusFilter);
+
+    toast.success('Status Updated');
   };
 
   // Apply filters based on search query and status
@@ -334,6 +338,10 @@ export default function DocumentRequestsAdmin() {
               <h3 className="text-sm font-medium">New Status</h3>
               <div className="flex flex-col gap-2">
                 <Button
+                  disabled={
+                    selectedDocument?.status === 'delivered' ||
+                    selectedDocument?.status === 'cancelled'
+                  }
                   variant="outline"
                   className="justify-start"
                   onClick={() => {
@@ -347,6 +355,10 @@ export default function DocumentRequestsAdmin() {
                   Approve Request
                 </Button>
                 <Button
+                  disabled={
+                    selectedDocument?.status === 'delivered' ||
+                    selectedDocument?.status === 'cancelled'
+                  }
                   variant="outline"
                   className="justify-start"
                   onClick={() => {
@@ -360,6 +372,7 @@ export default function DocumentRequestsAdmin() {
                   Reject Request
                 </Button>
                 <Button
+                  disabled={true}
                   variant="outline"
                   className="justify-start"
                   onClick={() => {
