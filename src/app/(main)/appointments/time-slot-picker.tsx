@@ -1,13 +1,20 @@
-"use client"
+'use client';
 
-import { Button } from "../../../components/ui/button"
-import { cn } from "@/lib/utils"
+import { format } from 'date-fns';
+import { Button } from '../../../components/ui/button';
+import { cn } from '@/lib/utils';
+
+interface TimeSlot {
+  start_time: string;
+  end_time: string;
+  is_available: boolean;
+}
 
 interface TimeSlotPickerProps {
-  timeSlots: string[]
-  selectedTimeSlot?: string
-  onSelectTimeSlot: (timeSlot: string) => void
-  disabled?: boolean
+  timeSlots: TimeSlot[];
+  selectedTimeSlot?: string;
+  onSelectTimeSlot: (timeSlot: string) => void;
+  disabled?: boolean;
 }
 
 export default function TimeSlotPicker({
@@ -18,34 +25,36 @@ export default function TimeSlotPicker({
 }: TimeSlotPickerProps) {
   if (timeSlots.length === 0) {
     return (
-      <div className="text-center p-4 border rounded-md bg-muted">
+      <div className="rounded-md border bg-muted p-4 text-center">
         <p className="text-sm text-muted-foreground">
           {disabled
-            ? "Please select a date first to see available time slots"
-            : "No time slots available for the selected date"}
+            ? 'Please select a date first to see available time slots'
+            : 'No time slots available for the selected date'}
         </p>
       </div>
-    )
+    );
   }
 
   return (
     <div className="grid grid-cols-3 gap-2">
-      {timeSlots.map((timeSlot: string) => (
+      {timeSlots.map((timeSlot: TimeSlot) => (
         <Button
-          key={timeSlot}
+          key={`${timeSlot.start_time}-${timeSlot.end_time}`}
           type="button"
           variant="outline"
           size="sm"
           className={cn(
-            "h-9",
-            selectedTimeSlot === timeSlot && "bg-[#1F2937] text-primary-foreground hover:bg-[#1F2937]/90",
+            'h-9',
+            selectedTimeSlot === timeSlot.start_time &&
+              'bg-[#1F2937] text-primary-foreground hover:bg-[#1F2937]/90',
+            !timeSlot.is_available && 'cursor-not-allowed opacity-50'
           )}
-          onClick={() => onSelectTimeSlot(timeSlot)}
-          disabled={disabled}
+          onClick={() => onSelectTimeSlot(timeSlot.start_time)}
+          disabled={disabled || !timeSlot.is_available}
         >
-          {timeSlot}
+          {format(new Date(`2000-01-01T${timeSlot.start_time}`), 'h:mm a')}
         </Button>
       ))}
     </div>
-  )
+  );
 }

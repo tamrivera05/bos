@@ -1,6 +1,6 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+'use client';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -8,35 +8,31 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Textarea } from "@/components/ui/textarea";
-import { useApiFetch } from "@/lib/hooks/useApiFetch";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertTriangle, ArrowDown, Check, Loader2, Minus } from "lucide-react";
-import { useCallback, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import useSWR from "swr";
-import { z } from "zod";
-import { TicketSchema } from "./ticket-schema";
+  FormMessage
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Textarea } from '@/components/ui/textarea';
+import { useApiFetch } from '@/lib/hooks/useApiFetch';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AlertTriangle, ArrowDown, Check, Loader2, Minus } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { TicketSchema } from './ticket-schema';
 
 const TicketForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const { data } = useSWR("/tickets");
-  console.log(data);
-
   const form = useForm<z.infer<typeof TicketSchema>>({
     resolver: zodResolver(TicketSchema),
     defaultValues: {
-      priority: "low",
-      subject: "",
-      description: "",
-    },
+      priority: 'low',
+      subject: '',
+      description: ''
+    }
   });
 
   const apiFetch = useApiFetch();
@@ -46,27 +42,25 @@ const TicketForm = () => {
       try {
         setIsSubmitting(true);
 
-        const response = await apiFetch("/tickets", {
-          method: "POST",
+        const response = await apiFetch('/tickets', {
+          method: 'POST',
           body: JSON.stringify({
             title: values.subject,
             description: values.description,
-            priority: values.priority,
-          }),
+            priority: values.priority
+          })
         });
 
-        console.log(values);
-
         if (response.error) {
-          toast.error("Failed to submit ticket", {
-            description: response.error.message,
+          toast.error('Failed to submit ticket', {
+            description: response.error.message
           });
           return;
         }
 
         setIsSuccess(true);
-        toast.success("Ticket submitted successfully", {
-          description: "We'll get back to you as soon as possible.",
+        toast.success('Ticket submitted successfully', {
+          description: "We'll get back to you as soon as possible."
         });
 
         // Reset form after successful submission
@@ -75,13 +69,13 @@ const TicketForm = () => {
           setIsSuccess(false);
         }, 2000);
       } catch (error) {
-        toast.error("An unexpected error occurred");
-        console.error("Ticket submission error:", error);
+        toast.error('An unexpected error occurred');
+        console.error('Ticket submission error:', error);
       } finally {
         setIsSubmitting(false);
       }
     },
-    [apiFetch, form],
+    [apiFetch, form]
   );
   return (
     <Card>
@@ -198,10 +192,10 @@ const TicketForm = () => {
                 )}
                 {isSuccess && <Check className="mr-2 h-4 w-4" />}
                 {isSubmitting
-                  ? "Submitting..."
+                  ? 'Submitting...'
                   : isSuccess
-                    ? "Submitted!"
-                    : "Submit Ticket"}
+                    ? 'Submitted!'
+                    : 'Submit Ticket'}
               </Button>
 
               <Button
