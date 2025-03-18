@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/stores/user-store";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -51,7 +52,8 @@ export const LogInForm = () => {
       if (response.ok) {
         // Login successful
         toast("Login successful");
-        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("authToken", data.data.authorization.token);
+        useUserStore.getState().setUser(data.data.user);
         router.push("/directory");
       } else {
         // Login failed

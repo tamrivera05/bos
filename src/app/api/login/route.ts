@@ -2,12 +2,28 @@ import { NextResponse } from 'next/server';
 
 interface AuthResponse {
   success: boolean;
+  message?: string;
   data: {
+    user: {
+      id: number;
+      name: string;
+      username: string;
+      email: string;
+      street_address: string;
+      city: string;
+      province: string;
+      birth_date: string;
+      contact_number: string;
+      gender: string;
+      role: string;
+      created_at: string;
+      updated_at: string;
+    };
     authorization: {
       token: string;
+      type: string;
     };
   };
-  message?: string;
 }
 
 export async function POST(request: Request) {
@@ -46,8 +62,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create response with token
-    const nextResponse = NextResponse.json({ token });
+    // Create response with token and user data
+    const nextResponse = NextResponse.json({ data: data.data });
 
     // Set HTTP-only cookie
     nextResponse.cookies.set('authToken', token, {
