@@ -1,6 +1,8 @@
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SWRConfig } from "swr";
+import { useSWRFetcher } from "@/lib/hooks/useSWRFetcher";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,12 +25,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const fetcher = useSWRFetcher();
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <SWRConfig value={{ fetcher }}>
+          {children}
+        </SWRConfig>
         <Toaster />
       </body>
     </html>

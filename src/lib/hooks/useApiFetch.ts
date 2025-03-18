@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { useRouter } from "next/navigation";
 
 type FetchOptions = RequestInit & {
   skipAuth?: boolean;
@@ -14,8 +13,6 @@ type ApiResponse<T> = {
 };
 
 export function useApiFetch() {
-  const router = useRouter();
-
   const apiFetch = useCallback(async <T>(endpoint: string, options: FetchOptions = {}): Promise<ApiResponse<T>> => {
     const { skipAuth = false, ...fetchOptions } = options;
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -82,22 +79,20 @@ export function useApiFetch() {
               }
             }
             localStorage.removeItem("authToken");
-            router.push("/log-in");
             return { 
               data: null, 
-              error: responseData?.error || { 
-                code: "AUTH_002", 
-                message: "Token expired. Please log in again." 
+              error: {
+                code: "AUTH_REQUIRED",
+                message: "Authentication required. Token expired or invalid."
               }
             };
           } catch {
             localStorage.removeItem("authToken");
-            router.push("/log-in");
             return { 
               data: null, 
-              error: { 
-                code: "AUTH_002", 
-                message: "Token expired. Please log in again." 
+              error: {
+                code: "AUTH_REQUIRED",
+                message: "Authentication required. Token refresh failed."
               }
             };
           }
@@ -150,7 +145,7 @@ export function useApiFetch() {
         }
       };
     }
-  }, [router]);
+  }, []);
 
   return apiFetch;
 }

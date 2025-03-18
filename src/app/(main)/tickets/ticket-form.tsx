@@ -1,10 +1,4 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertTriangle, ArrowDown, Check, Loader2, Minus } from "lucide-react";
-import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -17,8 +11,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertTriangle, ArrowDown, Check, Loader2, Minus } from "lucide-react";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
 import { TicketSchema } from "./ticket-schema";
 
 const TicketForm = () => {
@@ -38,18 +38,18 @@ const TicketForm = () => {
     values,
   ) => {
     setIsSubmitting(true);
-    
+
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    
+
     // Success state
     setIsSubmitting(false);
     setIsSuccess(true);
-    
+
     toast("Ticket submitted successfully", {
       description: "We'll get back to you as soon as possible.",
     });
-    
+
     console.log(values);
     // Reset form after 2 seconds
     setTimeout(() => {
@@ -165,7 +165,7 @@ const TicketForm = () => {
               <Button
                 type="submit"
                 disabled={isSubmitting || isSuccess}
-                className="w-full sm:w-auto bg-[#1F2937]"
+                className="w-full bg-[#1F2937] sm:w-auto"
               >
                 {isSubmitting && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -183,7 +183,7 @@ const TicketForm = () => {
                 variant="outline"
                 onClick={() => form.reset()}
                 disabled={isSubmitting}
-                className="w-full sm:w-auto text-[#1F2937] hover:bg-[#1F2937] hover:text-white"
+                className="w-full text-[#1F2937] hover:bg-[#1F2937] hover:text-white sm:w-auto"
               >
                 Reset
               </Button>
