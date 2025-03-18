@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { LayoutDashboard, LogOut, Menu, User } from "lucide-react";
+import { Calendar, LayoutDashboard, LogOut, Menu, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -79,6 +79,12 @@ export function MainNav() {
               <div className="px-2 pb-2">
                   <Separator orientation="horizontal" />
               </div>
+              <DropdownMenuItem asChild>
+                <div className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5"/>
+                <Link href="/appointments-list">Appointments</Link>
+                </div>
+              </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <div className="flex items-center gap-2">
                     <LogOut className="h-5 w-5"/>
