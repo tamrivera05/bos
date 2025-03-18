@@ -262,7 +262,7 @@ export default function DashboardPage() {
                       <TableCell>{getStatusBadge(ticket.status)}</TableCell>
                       <TableCell>{getPriorityBadge(ticket.priority)}</TableCell>
                       <TableCell>
-                        {format(new Date(ticket.createdAt), 'yyyy-mm-dd')}
+                        {format(new Date(ticket.createdAt), 'yyyy-MM-dd')}
                       </TableCell>
                       <TableCell>{ticket.createdBy}</TableCell>
                       <TableCell className="text-right">
