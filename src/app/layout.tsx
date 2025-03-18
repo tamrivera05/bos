@@ -1,8 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { SWRConfig } from "swr";
-import { swrFetcher } from "@/lib/swrFetcher";
+import SWRProvider from "@/components/SWRProvider"; // Import the new SWRProvider
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,9 +29,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SWRConfig value={{ fetcher: swrFetcher }}>
+        <SWRProvider> {/* Wrap children with SWRProvider */}
           {children}
-        </SWRConfig>
+        </SWRProvider>
         <Toaster />
       </body>
     </html>
