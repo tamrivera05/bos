@@ -28,6 +28,7 @@ import {
 } from '../../../../../types/database';
 
 export default function TicketDetailPage() {
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const params = useParams<{ id: string }>();
   const router = useRouter();
@@ -37,12 +38,14 @@ export default function TicketDetailPage() {
   const ticket = data?.data;
 
   const handleDeleteTicket = useCallback(async () => {
+    setIsDeleteLoading(true);
     const { error } = await apiFetch(`/tickets/${params.id}`, {
       method: 'DELETE'
     });
 
     if (error) {
       toast.error('Failed to delete ticket. Please try again.');
+      setIsDeleteLoading(false);
       return;
     }
 
@@ -168,12 +171,14 @@ export default function TicketDetailPage() {
             </DialogHeader>
             <DialogFooter>
               <Button
+                disabled={isDeleteLoading}
                 variant="outline"
                 onClick={() => setDeleteDialogOpen(false)}
               >
                 Cancel
               </Button>
               <Button
+                disabled={isDeleteLoading}
                 variant="destructive"
                 onClick={() => handleDeleteTicket()}
               >
