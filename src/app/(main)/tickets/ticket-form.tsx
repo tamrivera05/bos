@@ -13,17 +13,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
+import { useApiFetch } from "@/lib/hooks/useApiFetch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertTriangle, ArrowDown, Check, Loader2, Minus } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import useSWR from "swr";
 import { z } from "zod";
 import { TicketSchema } from "./ticket-schema";
 
 const TicketForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const { data } = useSWR("/tickets");
+  console.log(data);
 
   const form = useForm<z.infer<typeof TicketSchema>>({
     resolver: zodResolver(TicketSchema),
@@ -34,29 +39,50 @@ const TicketForm = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof TicketSchema>> = async (
-    values,
-  ) => {
-    setIsSubmitting(true);
+  const apiFetch = useApiFetch();
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+  const onSubmit: SubmitHandler<z.infer<typeof TicketSchema>> = useCallback(
+    async (values) => {
+      try {
+        setIsSubmitting(true);
 
-    // Success state
-    setIsSubmitting(false);
-    setIsSuccess(true);
+        const response = await apiFetch("/tickets", {
+          method: "POST",
+          body: JSON.stringify({
+            title: values.subject,
+            description: values.description,
+            priority: values.priority,
+          }),
+        });
 
-    toast("Ticket submitted successfully", {
-      description: "We'll get back to you as soon as possible.",
-    });
+        console.log(values);
 
-    console.log(values);
-    // Reset form after 2 seconds
-    setTimeout(() => {
-      form.reset();
-      setIsSuccess(false);
-    }, 2000);
-  };
+        if (response.error) {
+          toast.error("Failed to submit ticket", {
+            description: response.error.message,
+          });
+          return;
+        }
+
+        setIsSuccess(true);
+        toast.success("Ticket submitted successfully", {
+          description: "We'll get back to you as soon as possible.",
+        });
+
+        // Reset form after successful submission
+        setTimeout(() => {
+          form.reset();
+          setIsSuccess(false);
+        }, 2000);
+      } catch (error) {
+        toast.error("An unexpected error occurred");
+        console.error("Ticket submission error:", error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [apiFetch, form],
+  );
   return (
     <Card>
       <CardContent>
