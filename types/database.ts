@@ -20,3 +20,25 @@ export type WorkingHours = {
   start_time: string;
   end_time: string;
 };
+
+export type DocumentStatus = 'open' | 'delivered' | 'cancelled';
+
+export type Document = {
+  id: number;
+  full_name: string;
+  address: string;
+  email: string;
+  contact_number: string;
+  date_of_birth: string;
+  type: string;
+  purpose: string;
+  requester_id: number;
+  status: DocumentStatus;
+  created_at: string;
+  updated_at: string;
+  requester: {
+    id: number;
+    name: string;
+    email: string;
+  };
+};
