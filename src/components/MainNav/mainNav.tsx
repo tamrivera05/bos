@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Calendar, File, LogOut, Menu, Ticket, User } from "lucide-react";
+import { Calendar, File, Menu, Ticket, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "../ui/separator";
+import { LogoutButton } from "./LogoutButton";
 
 const navItems = [
   { name: "Directory", href: "/directory" },
@@ -93,11 +94,8 @@ export function MainNav() {
                 <Link href="/appointments-list">Appointments</Link>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <div className="flex items-center gap-2">
-                    <LogOut className="h-5 w-5"/>
-                <Link href="/logout">Logout</Link>
-                </div>
+              <DropdownMenuItem>
+                <LogoutButton />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
