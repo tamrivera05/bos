@@ -5,11 +5,14 @@ import { ApiResponse } from '@/lib/apiFetch';
 import { serverApiFetch } from '@/lib/serverApiFetch';
 import { Calendar } from 'lucide-react';
 import Link from 'next/link';
-import { User } from '../../../../types/database';
+import { User, WorkingHours } from '../../../../types/database';
 import AppointmentList from './appointmentList';
+import WorkingHoursPanel from './_components/working-hours-panel';
 
 const Appointment = async () => {
   const { data } = await serverApiFetch<ApiResponse<User>>('/user');
+  const { data: workingHours } =
+    await serverApiFetch<ApiResponse<WorkingHours>>('/working-hours');
   const isAdmin = data?.data?.user.role === 'admin';
 
   return (
@@ -46,6 +49,19 @@ const Appointment = async () => {
         <TabsContent value="appointments">
           <AppointmentList isAdmin={isAdmin} />
         </TabsContent>
+
+        {isAdmin && (
+          <TabsContent value="working-hours">
+            <WorkingHoursPanel
+              workingHours={
+                workingHours?.data || {
+                  start_time: '07:00',
+                  end_time: '17:00'
+                }
+              }
+            />
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );

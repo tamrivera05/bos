@@ -15,3 +15,8 @@ export type User = {
     updated_at: string;
   };
 };
+
+export type WorkingHours = {
+  start_time: string;
+  end_time: string;
+};
