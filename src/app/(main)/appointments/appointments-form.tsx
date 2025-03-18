@@ -120,7 +120,7 @@ export default function AppointmentsForm() {
         }, 2000);
       } catch (error) {
         toast.error('An unexpected error occurred');
-        console.error('Ticket submission error:', error);
+        console.error('Appointment submission error:', error);
       } finally {
         setIsSubmitting(false);
       }
