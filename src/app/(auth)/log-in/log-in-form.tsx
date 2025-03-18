@@ -16,15 +16,12 @@ import {
   FormMessage,
 } from "../../../components/ui/form";
 import { Input } from "../../../components/ui/input";
-import { useApiFetch } from "../../../lib/hooks/useApiFetch";
 import { loginSchema, type LoginFormValues } from "./log-in-schema";
 
 export const LogInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const apiFetch = useApiFetch();
-
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -38,9 +35,11 @@ export const LogInForm = () => {
     form.clearErrors(); // Clear previous errors
 
     try {
-      const response = await apiFetch("/auth/login", {
+      const response = await fetch("/api/login", {
         method: "POST",
-        skipAuth: true, // Skip auth for login request
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           login: values.login,
           password: values.password,
@@ -49,10 +48,10 @@ export const LogInForm = () => {
 
       const data = await response.json();
 
-      if (response.ok && data.success) {
+      if (response.ok) {
         // Login successful
         toast("Login successful");
-        localStorage.setItem("authToken", data.data.authorization.token);
+        localStorage.setItem("authToken", data.token);
         router.push("/directory");
       } else {
         // Login failed

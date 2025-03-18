@@ -71,15 +71,13 @@ export function useApiFetch() {
 }
 
 async function refreshToken(): Promise<boolean> {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   const currentToken = localStorage.getItem("authToken");
-
-  if (!baseUrl || !currentToken) {
+  if (!currentToken) {
     return false;
   }
 
   try {
-    const response = await fetch(`${baseUrl}/auth/refresh`, {
+    const response = await fetch('/api/refresh-token', {
       method: "POST",
       headers: {
         Authorization: `Bearer ${currentToken}`,
@@ -88,8 +86,8 @@ async function refreshToken(): Promise<boolean> {
 
     if (response.ok) {
       const data = await response.json();
-      if (data.success && data.data.authorization.token) {
-        localStorage.setItem("authToken", data.data.authorization.token);
+      if (data.token) {
+        localStorage.setItem("authToken", data.token);
         return true;
       }
     }
