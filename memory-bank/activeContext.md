@@ -13,6 +13,7 @@ The project is streamlining the appointment management system for users, removin
 - Implemented login form with validation using Zod schema
 - Created useApiFetch hook for API integration
 - Set up authentication flow with backend JWT system
+- Created serverApiFetch.ts for server-side API integration
 <<<<<<< Updated upstream
 - Refactored appointments-list to focus on user functionality, removing admin features
 - Added TypeScript interfaces for better type safety in appointments management
@@ -32,7 +33,9 @@ The project has moved beyond initial setup and is now implementing core function
 - TypeScript configuration
 - Root layout with Geist font
 - Login form with validation
-- API integration hook
+- API integration hooks:
+  - useApiFetch for client-side requests
+  - serverApiFetch for server-side requests
 <<<<<<< Updated upstream
 - Authentication system foundation
 - User-focused appointment listing and management

@@ -20,7 +20,9 @@
 
 - [x] Create login form component
 - [x] Implement form validation with Zod
-- [x] Create API integration hook (useApiFetch)
+- [x] Create API integration hooks:
+  - [x] useApiFetch for client-side requests
+  - [x] serverApiFetch for server-side requests
 - [x] Set up JWT-based authentication flow
 - [x] Implement secure JWT storage (HTTP-only cookies)
 - [x] Create Next.js API routes for authentication
@@ -107,7 +109,7 @@
 | Feature           | Status      | Progress | Notes                                         |
 | ----------------- | ----------- | -------- | --------------------------------------------- |
 | Project Setup     | Completed   | 100%     | Basic Next.js setup done                      |
-| Authentication    | In Progress | 35%      | Basic login flow implemented                  |
+| Authentication    | In Progress | 40%      | Login flow and API hooks implemented         |
 | User Profiles     | Not Started | 0%       | Planned for Phase 1                           |
 | Document Requests | Not Started | 0%       | Planned for Phase 2                           |
 | Appointments      | In Progress | 40%      | User view implemented, admin features planned |
