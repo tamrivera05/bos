@@ -42,3 +42,22 @@ export type Document = {
     email: string;
   };
 };
+
+export type TicketStatus = 'open' | 'in_progress' | 'resolved';
+export type TicketPriority = 'low' | 'medium' | 'high';
+
+export type Ticket = {
+  id: number;
+  user_id: number;
+  title: string;
+  description: string;
+  status: TicketStatus;
+  priority: TicketPriority;
+  created_at: string;
+  updated_at: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+  };
+};
