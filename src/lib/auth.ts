@@ -1,18 +1,19 @@
-export async function checkAuth(): Promise<boolean> {
+import { serverApiFetch } from './serverApiFetch';
+
+type AuthResponse = {
+  authenticated: boolean;
+};
+
+export async function checkAuthenticationStatus(): Promise<boolean> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/check-auth`, {
+    const { data, error } = await serverApiFetch<AuthResponse>('/auth/check-auth', {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-      }
     });
     
-    if (!response.ok) return false;
-    
-    const result = await response.json();
-    return result.data?.authenticated ?? false;
+    if (error) return false;
+    return data?.authenticated ?? false;
   } catch (error) {
-    console.error('Auth check failed:', error);
+    console.error('Authentication check failed:', error);
     return false;
   }
 }
