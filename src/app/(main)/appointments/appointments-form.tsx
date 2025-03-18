@@ -101,7 +101,7 @@ export default function AppointmentsForm() {
         });
 
         if (error) {
-          toast.error('Failed to submit ticket', {
+          toast.error('Failed to submit appointment', {
             description: error.message
           });
           return;
