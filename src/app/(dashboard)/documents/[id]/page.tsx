@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
 import { ArrowLeft, Check, Clock, FileText, X } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -13,11 +14,11 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { apiFetch } from '@/lib/apiFetch';
 import { toast } from 'sonner';
-import { DocumentStatus } from '../../../../../types/database';
 import useSWR from 'swr';
+import { DocumentStatus } from '../../../../../types/database';
 
 // Types for our document requests
 
@@ -33,43 +34,6 @@ interface DocumentRequest {
   status: DocumentStatus;
 }
 
-// Mock data for document requests
-const mockDocuments: Record<string, DocumentRequest> = {
-  'doc-001': {
-    id: 'doc-001',
-    fullName: 'John Smith',
-    address: '123 Main St, Anytown, PH',
-    email: 'john.smith@email.com',
-    birthdate: '1990-01-15',
-    contactNumber: '09123456789',
-    documentType: 'Barangay Clearance',
-    purpose: 'Employment requirement',
-    status: 'pending'
-  },
-  'doc-002': {
-    id: 'doc-002',
-    fullName: 'Sarah Johnson',
-    address: '456 Oak Ave, Somewhere, PH',
-    email: 'sarah.j@email.com',
-    birthdate: '1985-03-22',
-    contactNumber: '09187654321',
-    documentType: 'Business Permit',
-    purpose: 'Store opening requirement',
-    status: 'approved'
-  },
-  'doc-003': {
-    id: 'doc-003',
-    fullName: 'Michael Chen',
-    address: '789 Pine St, Elsewhere, PH',
-    email: 'mchen@email.com',
-    birthdate: '1995-11-08',
-    contactNumber: '09198765432',
-    documentType: 'Barangay ID',
-    purpose: 'Personal identification',
-    status: 'rejected'
-  }
-};
-
 export default function DocumentRequestDetail() {
   const router = useRouter();
   const pathname = usePathname();
@@ -77,7 +41,7 @@ export default function DocumentRequestDetail() {
   const [document, setDocument] = useState<DocumentRequest | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { data } = useSWR(`/documents/${id}`);
+  const { data, mutate } = useSWR(`/documents/${id}`);
 
   useEffect(() => {
     if (data) {
@@ -101,22 +65,18 @@ export default function DocumentRequestDetail() {
 
   // Update document status (using mock data)
   const updateDocumentStatus = async (status: DocumentStatus) => {
-    setIsLoading(true);
-    // Simulate API delay
-    setTimeout(() => {
-      // Update local state
-      if (document) {
-        const updatedDoc = { ...document, status };
-        setDocument(updatedDoc);
-        // Also update in our mock data store
-        if (document && mockDocuments[document.id]) {
-          mockDocuments[document.id] = updatedDoc;
-        }
-      }
+    const { error } = await apiFetch(`/documents/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status })
+    });
 
-      toast.success('Status Updated');
-      setIsLoading(false);
-    }, 500);
+    if (error) {
+      return toast.error('Failed to update status');
+    }
+
+    // success
+    toast.success('Status Updated');
+    mutate();
   };
 
   // Format date for display

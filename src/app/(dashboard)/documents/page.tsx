@@ -115,7 +115,6 @@ export default function DocumentRequestsAdmin() {
     });
 
     if (error) {
-      setIsLoading(false);
       return toast.error('Failed to update status');
     }
 
