@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Calendar, File, LogOut, Menu, User } from "lucide-react";
+import { Calendar, File, LogOut, Menu, Ticket, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -73,6 +73,14 @@ export function MainNav() {
                   <div className="flex items-center gap-2 justify-items-start">
                     <File className="h-5 w-5"/>
                     <Link href="/documents"> Manage Documents </Link>
+                  </div>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <div className="flex-col items-start">
+                  <div className="flex items-center gap-2 justify-items-start">
+                    <Ticket className="h-5 w-5"/>
+                    <Link href="/manage-tickets"> Manage Tickets </Link>
                   </div>
                 </div>
               </DropdownMenuItem>
