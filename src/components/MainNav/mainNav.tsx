@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useUserStore } from '@/stores/user-store';
-import { Calendar, File, LogOut, Menu, Ticket, User } from 'lucide-react';
+import { Calendar, File, LogOut, Menu, Ticket, User, UserCog } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -111,6 +111,14 @@ export function MainNav() {
                       <div className="flex items-center justify-items-start gap-2">
                         <Ticket className="h-5 w-5" />
                         <Link href="/manage-tickets"> Manage Tickets </Link>
+                      </div>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <div className="flex-col items-start">
+                      <div className="flex items-center justify-items-start gap-2">
+                        <UserCog className="h-5 w-5" />
+                        <Link href="/manage-users"> Manage User Accounts </Link>
                       </div>
                     </div>
                   </DropdownMenuItem>

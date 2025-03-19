@@ -163,9 +163,6 @@ export default function DashboardPage() {
           <h1 className="text-3xl font-extrabold tracking-tight text-[#1F2937]">
             Tickets
           </h1>
-          <p className="mt-1 text-muted-foreground">
-            Manage all support tickets
-          </p>
         </div>
       </div>
 
