@@ -1,28 +1,30 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { Calendar, File, Menu, Ticket, User } from "lucide-react";
+import { useState } from 'react';
+import Link from 'next/link';
+import { Calendar, File, Menu, Ticket, User } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Separator } from "../ui/separator";
-import { LogoutButton } from "./LogoutButton";
+  DropdownMenuTrigger
+} from '../ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Separator } from '../ui/separator';
+import { LogoutButton } from './LogoutButton';
+import { useUserStore } from '@/stores/user-store';
 
 const navItems = [
-  { name: "Directory", href: "/directory" },
-  { name: "Archive", href: "/archive" },
-  { name: "Appointments", href: "/appointments" },
-  { name: "Submission of Ticket", href: "/tickets" },
+  { name: 'Directory', href: '/directory' },
+  { name: 'Archive', href: '/archive' },
+  { name: 'Appointments', href: '/appointments' },
+  { name: 'Submission of Ticket', href: '/tickets' }
 ];
 
 export function MainNav() {
   const [isOpen, setIsOpen] = useState(false);
+  const user = useUserStore((state) => state.user);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
@@ -58,40 +60,44 @@ export function MainNav() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
-                <Link href="/profile" className="font-bold pb-2 ">
-                  John Doe
+                <Link href="/profile" className="pb-2 font-bold">
+                  {user?.name}
                 </Link>
               </DropdownMenuItem>
-              <div className="px-2">
-                  <Separator orientation="horizontal" />
-                  <span className="text-[10px] font-semibold text-[#9F9F9F] uppercase">
-                    {" "}
-                    Administrator Tools
-                  </span>
-              </div>
-              <DropdownMenuItem asChild>
-                <div className="flex-col items-start">
-                  <div className="flex items-center gap-2 justify-items-start">
-                    <File className="h-5 w-5"/>
-                    <Link href="/documents"> Manage Documents </Link>
+              {user?.role === 'admin' && (
+                <>
+                  <div className="px-2">
+                    <Separator orientation="horizontal" />
+                    <span className="text-[10px] font-semibold text-[#9F9F9F] uppercase">
+                      {' '}
+                      Administrator Tools
+                    </span>
                   </div>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <div className="flex-col items-start">
-                  <div className="flex items-center gap-2 justify-items-start">
-                    <Ticket className="h-5 w-5"/>
-                    <Link href="/manage-tickets"> Manage Tickets </Link>
+                  <DropdownMenuItem asChild>
+                    <div className="flex-col items-start">
+                      <div className="flex items-center justify-items-start gap-2">
+                        <File className="h-5 w-5" />
+                        <Link href="/documents"> Manage Documents </Link>
+                      </div>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <div className="flex-col items-start">
+                      <div className="flex items-center justify-items-start gap-2">
+                        <Ticket className="h-5 w-5" />
+                        <Link href="/manage-tickets"> Manage Tickets </Link>
+                      </div>
+                    </div>
+                  </DropdownMenuItem>
+                  <div className="px-2 pb-2">
+                    <Separator orientation="horizontal" />
                   </div>
-                </div>
-              </DropdownMenuItem>
-              <div className="px-2 pb-2">
-                  <Separator orientation="horizontal" />
-              </div>
+                </>
+              )}
               <DropdownMenuItem asChild>
                 <div className="flex items-center gap-2">
-                    <Calendar className="h-5 w-5"/>
-                <Link href="/appointments-list">Appointments</Link>
+                  <Calendar className="h-5 w-5" />
+                  <Link href="/appointments-list">Appointments</Link>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
@@ -109,7 +115,7 @@ export function MainNav() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[240px] sm:w-[300px]">
-              <nav className="flex flex-col gap-4 mx-6 my-12">
+              <nav className="mx-6 my-12 flex flex-col gap-4">
                 {navItems.map((item) => (
                   <Link
                     key={item.name}

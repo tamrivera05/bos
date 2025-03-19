@@ -1,10 +1,9 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useUserStore } from "@/stores/user-store";
-import { toast } from "sonner";
+import { useUserStore } from '@/stores/user-store';
+import { LogOut } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export function LogoutButton() {
   const router = useRouter();
@@ -13,9 +12,9 @@ export function LogoutButton() {
     try {
       // Call the Next.js API route for logout
       const response = await fetch('/api/logout', {
-        method: 'POST',
+        method: 'POST'
       });
-      
+
       if (!response.ok) {
         throw new Error('Logout failed');
       }
@@ -23,24 +22,22 @@ export function LogoutButton() {
       // Clear client-side auth data
       localStorage.removeItem('authToken');
       useUserStore.getState().setUser(null);
-      
+
       // Show success message and redirect
       toast.success('Logout successful');
       router.push('/log-in');
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
       toast.error('Logout failed');
     }
   };
 
   return (
-    <Button
-      variant="ghost"
-      className="flex items-center gap-2 w-full justify-start"
-      onClick={handleLogout}
-    >
-      <LogOut className="h-5 w-5" />
-      Logout
-    </Button>
+    <div role="button" onClick={handleLogout} className="flex-col items-start cursor-pointer">
+      <div className="flex items-center justify-items-start gap-2">
+        <LogOut className="h-5 w-5" />
+        <span>Logout</span>
+      </div>
+    </div>
   );
 }
