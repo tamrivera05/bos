@@ -1,19 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useUserStore } from '@/stores/user-store';
+import { Calendar, File, LogOut, Menu, Ticket, User } from 'lucide-react';
 import Link from 'next/link';
-import { Calendar, File, Menu, Ticket, User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '../ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Separator } from '../ui/separator';
-import { LogoutButton } from './LogoutButton';
-import { useUserStore } from '@/stores/user-store';
 
 const navItems = [
   { name: 'Directory', href: '/directory' },
@@ -25,7 +26,31 @@ const navItems = [
 export function MainNav() {
   const [isOpen, setIsOpen] = useState(false);
   const user = useUserStore((state) => state.user);
+  const router = useRouter();
 
+  const handleLogout = async () => {
+    try {
+      // Call the Next.js API route for logout
+      const response = await fetch('/api/logout', {
+        method: 'POST'
+      });
+
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+
+      // Clear client-side auth data
+      localStorage.removeItem('authToken');
+      useUserStore.getState().setUser(null);
+
+      // Show success message and redirect
+      toast.success('Logout successful');
+      router.push('/log-in');
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error('Logout failed');
+    }
+  };
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-8">
@@ -100,8 +125,16 @@ export function MainNav() {
                   <Link href="/appointments-list">Appointments</Link>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <LogoutButton />
+              <DropdownMenuItem asChild={true}>
+                <button
+                  onClick={handleLogout}
+                  className="w-full cursor-pointer flex-col items-start"
+                >
+                  <div className="flex items-center justify-items-start gap-2">
+                    <LogOut className="h-5 w-5" />
+                    <span>Logout</span>
+                  </div>
+                </button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
