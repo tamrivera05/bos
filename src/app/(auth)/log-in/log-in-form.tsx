@@ -136,14 +136,14 @@ export const LogInForm = () => {
                   </FormItem>
                 )}
               />
-              <Button
+              {/* <Button
                 type="button"
                 variant="link"
                 className="px-0 font-normal"
                 onClick={() => router.push("/forgot-password")}
               >
                 Forgot password?
-              </Button>
+              </Button> */}
             </div>
           </div>
 

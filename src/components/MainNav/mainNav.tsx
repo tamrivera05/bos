@@ -84,10 +84,15 @@ export function MainNav() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
-                <Link href="/profile" className="pb-2 font-bold">
+              <div className='p-2'>
+              <span className="pb-2 font-bold">
                   {user?.name}
-                </Link>
+                </span>
+              </div>
+              <DropdownMenuItem asChild>
+                {/* <Link href="/profile" className="pb-2 font-bold">
+                  {user?.name}
+                </Link> */}
               </DropdownMenuItem>
               {user?.role === 'admin' && (
                 <>
