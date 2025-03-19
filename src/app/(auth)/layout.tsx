@@ -12,7 +12,7 @@ const AuthLayout = async ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <div className="container mx-auto px-4 h-screen flex items-center justify-center">
+    <div className=" mx-auto h-screen flex items-center justify-center">
       {children}
     </div>
   );

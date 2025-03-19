@@ -12,7 +12,7 @@ const logIn = () => {
       </div>
 
       <div className="hidden h-full w-1/2 flex-auto items-center justify-center lg:flex dark:border-l">
-        <div className="text-[7rem] leading-none font-extrabold text-white">
+        <div className="text-[6rem] leading-none font-extrabold text-white">
           Barangay
           <br />
           Online
