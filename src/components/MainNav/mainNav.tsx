@@ -94,7 +94,7 @@ export function MainNav() {
                 <Link href="/appointments-list">Appointments</Link>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem asChild>
                 <LogoutButton />
               </DropdownMenuItem>
             </DropdownMenuContent>
