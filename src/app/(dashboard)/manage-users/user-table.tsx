@@ -21,7 +21,6 @@ import {
 interface UserTableProps {
   users: Users[];
   onDisableUser: (userId: number) => void;
-  onEnableUser: (userId: number) => void;
 }
 
 export function UserTable({ users, onDisableUser }: UserTableProps) {

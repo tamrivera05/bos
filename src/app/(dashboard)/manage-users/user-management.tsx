@@ -1,20 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { apiFetch, ApiResponse } from '@/lib/apiFetch';
 import { Search } from 'lucide-react';
-import { Input } from '../../../components/ui/input';
-import { UserTable } from './user-table';
-import { DisableUserDialog } from './disable-user-dialog';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import useSWR from 'swr';
+import { Users } from '../../../../types/database';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
-  CardTitle,
-  CardDescription
+  CardTitle
 } from '../../../components/ui/card';
-import useSWR from 'swr';
-import { ApiResponse } from '@/lib/apiFetch';
-import { Users } from '../../../../types/database';
+import { Input } from '../../../components/ui/input';
+import { DisableUserDialog } from './disable-user-dialog';
+import { UserTable } from './user-table';
 
 export function UserManagement() {
   const [users, setUsers] = useState<Users[]>([]);
@@ -22,7 +23,7 @@ export function UserManagement() {
   const [userToDisable, setUserToDisable] = useState<(typeof users)[0] | null>(
     null
   );
-  const { data } = useSWR<ApiResponse<Users[]>>('/auth/admin/users');
+  const { data, mutate } = useSWR<ApiResponse<Users[]>>('/auth/admin/users');
 
   useEffect(() => {
     if (data?.data) {
@@ -43,25 +44,32 @@ export function UserManagement() {
     }
   };
 
-  const handleEnableUser = (userId: number) => {
-    // Enable user without confirmation
-    setUsers(
-      users.map((user) =>
-        user.id === userId ? { ...user, status: 'Active' } : user
-      )
-    );
-  };
-
-  const confirmDisable = () => {
+  const confirmDisable = useCallback(async () => {
     if (userToDisable) {
-      setUsers(
-        users.map((user) =>
-          user.id === userToDisable.id ? { ...user, status: 'Inactive' } : user
-        )
-      );
-      setUserToDisable(null);
+      try {
+        // if user is admin then don't disable
+        if (userToDisable.is_admin) {
+          toast.error('Cannot disable an admin account');
+
+          // Close the dialog
+          setUserToDisable(null);
+          return;
+        }
+
+        await apiFetch(`/auth/admin/users/${userToDisable.id}`, {
+          method: 'DELETE'
+        });
+        toast.success('User account disabled successfully');
+        mutate();
+
+        // Close the dialog
+        setUserToDisable(null);
+      } catch {
+        toast.error('Failed to disable user account');
+        return;
+      }
     }
-  };
+  }, [mutate, userToDisable]);
 
   return (
     <Card>
@@ -81,11 +89,7 @@ export function UserManagement() {
         </div>
       </CardHeader>
       <CardContent>
-        <UserTable
-          users={filteredUsers}
-          onDisableUser={handleDisableUser}
-          onEnableUser={handleEnableUser}
-        />
+        <UserTable users={filteredUsers} onDisableUser={handleDisableUser} />
 
         <DisableUserDialog
           user={userToDisable}
