@@ -1,39 +1,40 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Button } from "../../../components/ui/button";
-import { Input } from "../../../components/ui/input";
+import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Button } from '../../../components/ui/button';
+import { Input } from '../../../components/ui/input';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "../../../components/ui/form";
-import { format } from "date-fns";
-import { Calendar } from "../../../components/ui/calendar";
-import { CalendarIcon } from "lucide-react";
+  FormMessage
+} from '../../../components/ui/form';
+import { format } from 'date-fns';
+import { Calendar } from '../../../components/ui/calendar';
+import { CalendarIcon } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-} from "../../../components/ui/popover";
+  PopoverTrigger
+} from '../../../components/ui/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "../../../components/ui/select";
-import { cn } from "@/lib/utils";
-import { useUserStore } from "@/stores/user-store";
-import { toast } from "sonner";
-import { signUpSchema, type SignUpFormValues } from "./sign-up-schema";
+  SelectValue
+} from '../../../components/ui/select';
+import { cn } from '@/lib/utils';
+import { useUserStore } from '@/stores/user-store';
+import { toast } from 'sonner';
+import { signUpSchema, type SignUpFormValues } from './sign-up-schema';
+import { useMask } from '@react-input/mask';
 
 export const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -43,17 +44,17 @@ export const SignUpForm = () => {
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      name: "",
-      username: "",
-      email: "",
-      password: "",
-      street_address: "",
-      city: "",
-      province: "",
-      birth_date: "",
-      contact_number: "",
-      gender: "male",
-    },
+      name: '',
+      username: '',
+      email: '',
+      password: '',
+      street_address: '',
+      city: '',
+      province: '',
+      birth_date: '',
+      contact_number: '',
+      gender: 'male'
+    }
   });
 
   async function onSubmit(values: SignUpFormValues) {
@@ -61,41 +62,46 @@ export const SignUpForm = () => {
     form.clearErrors(); // Clear previous errors
 
     try {
-      const response = await fetch("/api/register", {
-        method: "POST",
+      const response = await fetch('/api/register', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(values)
       });
 
       const data = await response.json();
 
       if (response.ok) {
         // Registration successful
-        toast("Registration successful");
-        localStorage.setItem("authToken", data.data.authorization.token);
+        toast('Registration successful');
+        localStorage.setItem('authToken', data.data.authorization.token);
         useUserStore.getState().setUser(data.data.user);
-        router.push("/directory");
+        router.push('/directory');
       } else {
         // Registration failed
-        console.log("Registration failed", data);
-        form.setError("root", {
+        console.log('Registration failed', data);
+        form.setError('root', {
           message:
             data.error?.message ||
-            "Registration failed. Please check your input.",
+            'Registration failed. Please check your input.'
         });
       }
     } catch (error) {
-      console.log("Registration error:", error);
-      form.setError("root", {
+      console.log('Registration error:', error);
+      form.setError('root', {
         message:
-          "Registration failed. Please check your input and network connection.",
+          'Registration failed. Please check your input and network connection.'
       });
     } finally {
       setIsLoading(false);
     }
   }
+
+  const contactRef = useMask({
+    mask: '+63 (___) ___ ____',
+    replacement: { _: /\d/ }
+  });
 
   return (
     <div className="mx-auto flex w-full flex-col gap-10 overflow-auto md:px-14 lg:px-44 lg:py-16">
@@ -158,7 +164,7 @@ export const SignUpForm = () => {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        type={showPassword ? "text" : "password"}
+                        type={showPassword ? 'text' : 'password'}
                         {...field}
                       />
                       <Button
@@ -174,7 +180,7 @@ export const SignUpForm = () => {
                           <Eye className="h-4 w-4 text-gray-500" />
                         )}
                         <span className="sr-only">
-                          {showPassword ? "Hide password" : "Show password"}
+                          {showPassword ? 'Hide password' : 'Show password'}
                         </span>
                       </Button>
                     </div>
@@ -189,7 +195,7 @@ export const SignUpForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#1F2937]">
-                    {" "}
+                    {' '}
                     Street Address
                   </FormLabel>
                   <FormControl>
@@ -235,17 +241,13 @@ export const SignUpForm = () => {
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
-                          variant={"outline"}
+                          variant={'outline'}
                           className={cn(
-                            "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground",
+                            'w-full pl-3 text-left font-normal',
+                            !field.value && 'text-muted-foreground'
                           )}
                         >
-                          {field.value ? (
-                            field.value
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
+                          {field.value ? field.value : <span>Pick a date</span>}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
                       </FormControl>
@@ -253,14 +255,16 @@ export const SignUpForm = () => {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={field.value ? new Date(field.value) : undefined}
+                        selected={
+                          field.value ? new Date(field.value) : undefined
+                        }
                         onSelect={(date) => {
                           if (date) {
                             field.onChange(format(date, 'yyyy-MM-dd'));
                           }
                         }}
                         disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
+                          date > new Date() || date < new Date('1900-01-01')
                         }
                         initialFocus
                       />
@@ -279,7 +283,7 @@ export const SignUpForm = () => {
                     Contact Number
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} ref={contactRef} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -319,15 +323,15 @@ export const SignUpForm = () => {
             className="w-full bg-[#1F2937]"
             disabled={isLoading}
           >
-            {isLoading ? "Signing up.." : "Sign up"}
+            {isLoading ? 'Signing up..' : 'Sign up'}
           </Button>
 
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            Already have an account?{" "}
+            Already have an account?{' '}
             <Button
               variant="link"
               className="p-0 font-normal"
-              onClick={() => router.push("/log-in")}
+              onClick={() => router.push('/log-in')}
             >
               Log in
             </Button>
