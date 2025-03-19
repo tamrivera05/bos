@@ -30,9 +30,11 @@ import {
 export default function TicketDetailPage() {
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const params = useParams<{ id: string }>();
   const router = useRouter();
-  const { data, isLoading } = useSWR<ApiResponse<Ticket>>(
+  const { data, isLoading, mutate } = useSWR<ApiResponse<Ticket>>(
     `/tickets/${params.id}`
   );
   const ticket = data?.data;
@@ -152,41 +154,50 @@ export default function TicketDetailPage() {
           )}
         </div>
 
-        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-          <DialogTrigger asChild>
-            <Button variant="destructive" className="gap-2">
-              <Trash2 className="h-4 w-4" />
-              Delete
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>
-                Are you sure you want to delete this ticket?
-              </DialogTitle>
-              <DialogDescription>
-                This action cannot be undone. This will permanently delete the
-                ticket.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <Button
-                disabled={isDeleteLoading}
-                variant="outline"
-                onClick={() => setDeleteDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                disabled={isDeleteLoading}
-                variant="destructive"
-                onClick={() => handleDeleteTicket()}
-              >
+        <div>
+          <Button
+            onClick={() => setIsUpdateDialogOpen(true)}
+            className="mr-2 gap-2"
+            variant="secondary"
+          >
+            Update Status
+          </Button>
+          <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="destructive" className="gap-2">
+                <Trash2 className="h-4 w-4" />
                 Delete
               </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  Are you sure you want to delete this ticket?
+                </DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone. This will permanently delete the
+                  ticket.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button
+                  disabled={isDeleteLoading}
+                  variant="outline"
+                  onClick={() => setDeleteDialogOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  disabled={isDeleteLoading}
+                  variant="destructive"
+                  onClick={() => handleDeleteTicket()}
+                >
+                  Delete
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       <Card>
@@ -262,6 +273,233 @@ export default function TicketDetailPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Status Update Dialog */}
+      <Dialog open={isUpdateDialogOpen} onOpenChange={setIsUpdateDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Update Ticket</DialogTitle>
+            <DialogDescription>
+              Update the status and priority for ticket #
+              {ticket && ticket.id.toString().padStart(4, '0')}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium">Current Status</h3>
+              <div>{ticket && getStatusBadge(ticket.status)}</div>
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium">Current Priority</h3>
+              <div>{ticket && getPriorityBadge(ticket.priority)}</div>
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium">Update Status</h3>
+              <div className="flex flex-col gap-2">
+                <Button
+                  disabled={isUpdating || ticket?.status === 'resolved'}
+                  variant="outline"
+                  className="justify-start"
+                  onClick={async () => {
+                    try {
+                      setIsUpdating(true);
+                      const { error } = await apiFetch(
+                        `/tickets/${params.id}`,
+                        {
+                          method: 'PUT',
+                          body: JSON.stringify({
+                            status: 'in_progress',
+                            priority: ticket?.priority
+                          })
+                        }
+                      );
+
+                      if (error) {
+                        toast.error('Failed to update ticket');
+                        return;
+                      }
+
+                      await mutate();
+                      toast.success('Ticket updated successfully');
+                      setIsUpdateDialogOpen(false);
+                    } catch (err) {
+                      console.error('Error updating ticket:', err);
+                      toast.error('Failed to update ticket');
+                    } finally {
+                      setIsUpdating(false);
+                    }
+                  }}
+                >
+                  Mark as In Progress
+                </Button>
+                <Button
+                  disabled={isUpdating || ticket?.status === 'resolved'}
+                  variant="outline"
+                  className="justify-start"
+                  onClick={async () => {
+                    try {
+                      setIsUpdating(true);
+                      const { error } = await apiFetch(
+                        `/tickets/${params.id}`,
+                        {
+                          method: 'PUT',
+                          body: JSON.stringify({
+                            status: 'resolved',
+                            priority: ticket?.priority
+                          })
+                        }
+                      );
+
+                      if (error) {
+                        toast.error('Failed to update ticket');
+                        return;
+                      }
+
+                      await mutate();
+                      toast.success('Ticket updated successfully');
+                      setIsUpdateDialogOpen(false);
+                    } catch (err) {
+                      console.error('Error updating ticket:', err);
+                      toast.error('Failed to update ticket');
+                    } finally {
+                      setIsUpdating(false);
+                    }
+                  }}
+                >
+                  Mark as Resolved
+                </Button>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium">Update Priority</h3>
+              <div className="flex flex-col gap-2">
+                <Button
+                  disabled={isUpdating || ticket?.priority === 'high'}
+                  variant="outline"
+                  className="justify-start"
+                  onClick={async () => {
+                    try {
+                      setIsUpdating(true);
+                      const { error } = await apiFetch(
+                        `/tickets/${params.id}`,
+                        {
+                          method: 'PUT',
+                          body: JSON.stringify({
+                            status: ticket?.status,
+                            priority: 'high'
+                          })
+                        }
+                      );
+
+                      if (error) {
+                        toast.error('Failed to update ticket');
+                        return;
+                      }
+
+                      await mutate();
+                      toast.success('Ticket updated successfully');
+                      setIsUpdateDialogOpen(false);
+                    } catch (err) {
+                      console.error('Error updating ticket:', err);
+                      toast.error('Failed to update ticket');
+                    } finally {
+                      setIsUpdating(false);
+                    }
+                  }}
+                >
+                  Set to High Priority
+                </Button>
+                <Button
+                  disabled={isUpdating || ticket?.priority === 'medium'}
+                  variant="outline"
+                  className="justify-start"
+                  onClick={async () => {
+                    try {
+                      setIsUpdating(true);
+                      const { error } = await apiFetch(
+                        `/tickets/${params.id}`,
+                        {
+                          method: 'PUT',
+                          body: JSON.stringify({
+                            status: ticket?.status,
+                            priority: 'medium'
+                          })
+                        }
+                      );
+
+                      if (error) {
+                        toast.error('Failed to update ticket');
+                        return;
+                      }
+
+                      await mutate();
+                      toast.success('Ticket updated successfully');
+                      setIsUpdateDialogOpen(false);
+                    } catch (err) {
+                      console.error('Error updating ticket:', err);
+                      toast.error('Failed to update ticket');
+                    } finally {
+                      setIsUpdating(false);
+                    }
+                  }}
+                >
+                  Set to Medium Priority
+                </Button>
+                <Button
+                  disabled={isUpdating || ticket?.priority === 'low'}
+                  variant="outline"
+                  className="justify-start"
+                  onClick={async () => {
+                    try {
+                      setIsUpdating(true);
+                      const { error } = await apiFetch(
+                        `/tickets/${params.id}`,
+                        {
+                          method: 'PUT',
+                          body: JSON.stringify({
+                            status: ticket?.status,
+                            priority: 'low'
+                          })
+                        }
+                      );
+
+                      if (error) {
+                        toast.error('Failed to update ticket');
+                        return;
+                      }
+
+                      await mutate();
+                      toast.success('Ticket updated successfully');
+                      setIsUpdateDialogOpen(false);
+                    } catch (err) {
+                      console.error('Error updating ticket:', err);
+                      toast.error('Failed to update ticket');
+                    } finally {
+                      setIsUpdating(false);
+                    }
+                  }}
+                >
+                  Set to Low Priority
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              disabled={isUpdating}
+              variant="outline"
+              onClick={() => setIsUpdateDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
