@@ -1,26 +1,30 @@
-"use client"
+'use client';
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../../../components/ui/dropdown-menu"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/ui/table"
-import { Button } from "../../../components/ui/button"
-import { MoreHorizontal } from "lucide-react"
-
-interface User {
-  id: string
-  name: string
-  email: string
-  role: string
-  status: string
-  lastActive: string
-}
+import { MoreHorizontal } from 'lucide-react';
+import { Users } from '../../../../types/database';
+import { Button } from '../../../components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '../../../components/ui/dropdown-menu';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '../../../components/ui/table';
 
 interface UserTableProps {
-  users: User[]
-  onDisableUser: (userId: string) => void
-  onEnableUser: (userId: string) => void
+  users: Users[];
+  onDisableUser: (userId: number) => void;
+  onEnableUser: (userId: number) => void;
 }
 
-export function UserTable({ users, onDisableUser, onEnableUser }: UserTableProps) {
+export function UserTable({ users, onDisableUser }: UserTableProps) {
   return (
     <div className="rounded-md border">
       <Table>
@@ -54,16 +58,12 @@ export function UserTable({ users, onDisableUser, onEnableUser }: UserTableProps
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      {user.status === "Active" ? (
-                        <DropdownMenuItem
-                          onClick={() => onDisableUser(user.id)}
-                          className="text-destructive focus:text-destructive"
-                        >
-                          Disable
-                        </DropdownMenuItem>
-                      ) : (
-                        <DropdownMenuItem onClick={() => onEnableUser(user.id)}>Enable</DropdownMenuItem>
-                      )}
+                      <DropdownMenuItem
+                        onClick={() => onDisableUser(user.id)}
+                        className="text-destructive focus:text-destructive"
+                      >
+                        Delete
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
@@ -73,6 +73,5 @@ export function UserTable({ users, onDisableUser, onEnableUser }: UserTableProps
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }
-
